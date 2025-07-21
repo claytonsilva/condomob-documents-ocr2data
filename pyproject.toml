@@ -1,0 +1,109 @@
+[tool.poetry]
+name = "realpark-analysis"
+version = '0.0.0'
+description = 'Repositório de automações do a dia a dia'
+authors = ["clayton@xdevel.com.br"]
+license = "MIT"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = '^3.13'
+typer = "^0.16.0"
+pyyaml = "^6.0.2"
+docling = "^2.40.0"
+pandas = "^2.3.0"
+
+
+[tool.poetry.group.dev.dependencies]
+debugpy = "^1.8.14"
+ruff = "^0.11.13"
+boto3 = "^1.38.32"
+pytest = "^8.4.0"
+pytest-xdist = "^3.7.0"
+pytest-cov = "^6.1.1"
+pytest-deadfixtures = '^2.2.1'
+pytest-dotenv = '^0.5.2'
+pytest-env = '^1.1.5'
+pytest-socket = '^0.7.0'
+pytest-vcr = '^1.0.2'
+pytest-asyncio = '^1.0.0'
+pydevd = "^3.3.0"
+mypy = "^1.16.0"
+types-pyyaml = "^6.0.12.20250516"
+
+[tool.ruff]
+line-length = 79
+target-version = "py313"
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".ipynb_checkpoints",
+  ".mypy_cache",
+  ".nox",
+  ".pants.d",
+  ".pyenv",
+  ".pytest_cache",
+  ".pytype",
+  ".ruff_cache",
+  ".svn",
+  ".tox",
+  ".venv",
+  ".vscode",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "node_modules",
+  "site-packages",
+  "venv",
+]
+
+[tool.ruff.lint]
+select = [
+  # pycodestyle
+  "E",
+  # Pyflakes
+  "F",
+  # pyupgrade
+  "UP",
+  # flake8-bugbear
+  "B",
+  # flake8-simplify
+  "SIM",
+  # isort
+  "I",
+]
+ignore = ["E501"]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = 30
+
+[tool.coverage.run]
+omit = ['src/**/tests/**', 'src/**/settings/**', 'src/**/migrations/**']
+branch = true
+relative_files = true
+
+[tool.coverage.report]
+precision = 2
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+
+build-backend = "poetry.core.masonry.api"

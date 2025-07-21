@@ -1,7 +1,19 @@
 from enum import Enum
+
 from pandas import Series
 
-ExtracTypeRow = Enum('EXTRACTED_TYPE_ROW', [
-    ('TOTAL', 1), ('TITLE', 2), ('ROW', 3), ('HEADERS', 4), ('TRUNCATED_DESCRIPTION', 5), ('TRUNCATED_PARTICIPANT', 6), ('OTHERS', 7)])
-COLLUMNS = Series(['Data', 'Descrição', 'Participante',
-                  'Documento', 'Período', 'Valor'])
+ExtracTypeRow = Enum(
+    "EXTRACTED_TYPE_ROW",
+    [
+        ("TOTAL", 1),
+        ("TITLE", 2),
+        ("ROW", 3),
+        ("HEADERS", 4),
+        ("TRUNCATED_DESCRIPTION", 5),
+        ("TRUNCATED_PARTICIPANT", 6),
+        ("OTHERS", 7),
+    ],
+)
+COLLUMNS = Series(
+    ["Data", "Descrição", "Participante", "Documento", "Período", "Valor"]
+)

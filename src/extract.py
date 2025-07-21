@@ -1,14 +1,18 @@
-from constants import ExtracTypeRow, COLLUMNS
-from pandas import DataFrame, Series
 import re
+from datetime import datetime
+
+from pandas import DataFrame, Series
+
+from constants import ExtracTypeRow
 
 
 def get_current_title(table: DataFrame, row: Series) -> Series:
-    for _, row in table[row.name::-1].iterrows():
-        type_row = row['tipoDado']
+    for _, itRow in table[row.name :: -1].iterrows():
+        type_row = itRow["tipoDado"]
         if type_row == ExtracTypeRow.TITLE:
-            return row['Data']
+            return itRow["Data"]
     return None
+
 
 # identifica a primeira linha com truncamento
 
@@ -16,39 +20,40 @@ def get_current_title(table: DataFrame, row: Series) -> Series:
 def has_truncated_rows(table: DataFrame, init_index: int) -> int:
     truncated_row_index = -1
     for index, row in table[table.index >= init_index].iterrows():
-        type_row = row['tipoDado']
-        if type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT:
+        type_row = row["tipoDado"]
+        if (
+            type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION
+            or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT
+        ):
             truncated_row_index = index
             break
     return truncated_row_index
 
 
-def identify_row(line: Series) -> ExtracTypeRow | None:
-    first_collumn_is_clear = line.loc['Data'].strip() == ''
-    second_collumn_is_clear = line.loc['Descrição'].strip() == ''
-    third_collumn_is_clear = line.loc['Participante'].strip() == ''
-    last_collumn_is_clear = line.loc['Valor'].strip() == ''
-    first_collumn = line.loc['Data'].strip()
+def validate(date_text):
+    try:
+        if date_text != datetime.strptime(date_text, "%d/%m/%Y").strftime(
+            "%d/%m/%Y"
+        ):
+            raise ValueError
+        return True
+    except ValueError:
+        return False
 
-    # primeiro grupo de condicionais caso a primeira coluna vier vazia
-    if first_collumn_is_clear:
-        if last_collumn_is_clear:
-            return ExtracTypeRow.TRUNCATED_PARTICIPANT if second_collumn_is_clear else ExtracTypeRow.TRUNCATED_DESCRIPTION
-        else:
-            return ExtracTypeRow.OTHERS
-    # segundo grupo de condicionais caso a primeira coluna vier vazia
-    elif not first_collumn_is_clear and second_collumn_is_clear and third_collumn_is_clear and last_collumn_is_clear:
-        if re.match(r"^TOTAL: \d+\.\d+.*", first_collumn):
-            return ExtracTypeRow.TOTAL
-        elif re.match(r"^(\d+\.\d[0-9.]*)( - )(.*$)", first_collumn):
-            return ExtracTypeRow.TITLE
-        else:
-            return ExtracTypeRow.OTHERS
+
+def identify_row(line: Series) -> ExtracTypeRow | None:
+    first_collumn = line.loc["Data"].strip()
+
+    if first_collumn == "Data":
+        return ExtracTypeRow.HEADERS
+    elif re.match(r"^TOTAL: \d+\.\d+.*", first_collumn):
+        return ExtracTypeRow.TOTAL
+    elif re.match(r"^(\d+\.\d[0-9.]*)( - )(.*$)", first_collumn):
+        return ExtracTypeRow.TITLE
+    elif validate(first_collumn):
+        return ExtracTypeRow.ROW
     else:
-        if first_collumn == 'Data':
-            return ExtracTypeRow.HEADERS
-        else:
-            return ExtracTypeRow.ROW
+        return ExtracTypeRow.OTHERS
 
 
 def append_data(current_data: str, new_data: str) -> str:
@@ -58,7 +63,7 @@ def append_data(current_data: str, new_data: str) -> str:
 def get_next_row_aftertruncated(table: DataFrame, init_index: int) -> int:
     next_row_index = -1
     for index, row in table[table.index > init_index].iterrows():
-        type_row = row['tipoDado']
+        type_row = row["tipoDado"]
         if type_row == ExtracTypeRow.ROW:
             next_row_index = index
             break
@@ -68,47 +73,61 @@ def get_next_row_aftertruncated(table: DataFrame, init_index: int) -> int:
 def merge_truncated(table: DataFrame, init_index: int) -> DataFrame:
     # identificar a linha imediata que contém a descrição truncada
     rows_to_drop = []
-    description = ''
-    participant = ''
-    description_index = 'Descrição'
-    participant_index = 'Participante'
+    description = ""
+    participant = ""
+    description_index = "Descrição"
+    participant_index = "Participante"
     merged_rows = 0
     row_to_append_index = get_next_row_aftertruncated(table, init_index)
     row_to_stop_search_index = get_next_row_aftertruncated(
-        table, row_to_append_index)
+        table, row_to_append_index
+    )
     for index, row in table[
-        (table.index >= init_index) &
-        (
-            (
-                (table.index < row_to_stop_search_index) &
-                (row_to_stop_search_index >= 0) | (
-                    row_to_stop_search_index < 0)
-            )
-        ) &
-        (
-            (table['tipoDado'] == ExtracTypeRow.TRUNCATED_DESCRIPTION) |
-            (table['tipoDado'] == ExtracTypeRow.TRUNCATED_PARTICIPANT)
+        (table.index >= init_index)
+        & (
+            (table.index < row_to_stop_search_index)
+            & (row_to_stop_search_index >= 0)
+            | (row_to_stop_search_index < 0)
+        )
+        & (
+            (table["tipoDado"] == ExtracTypeRow.TRUNCATED_DESCRIPTION)
+            | (table["tipoDado"] == ExtracTypeRow.TRUNCATED_PARTICIPANT)
             # | ((table['tipoDado'] == ExtracTypeRow.ROW) &
             #     ((table['Descrição'] == '') |
             #      (table['Participante'] == ''))
             #  )
         )
     ].iterrows():
-        type_row = row['tipoDado']
-        next_row = Series([]) if len(
-            table[table.index > index].index) == 0 else table.loc[table[table.index > index].index[0]]
-        prev_row = Series([]) if len(
-            table[table.index < index].index) == 0 else table.loc[table[table.index < index].index[-1]]
+        type_row = row["tipoDado"]
+        next_row = (
+            Series([])
+            if len(table[table.index > index].index) == 0
+            else table.loc[table[table.index > index].index[0]]
+        )
+        prev_row = (
+            Series([])
+            if len(table[table.index < index].index) == 0
+            else table.loc[table[table.index < index].index[-1]]
+        )
 
-        if type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT or index == row_to_append_index:
-            if type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT:
+        if (
+            type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION
+            or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT
+            or index == row_to_append_index
+        ):
+            if (
+                type_row == ExtracTypeRow.TRUNCATED_DESCRIPTION
+                or type_row == ExtracTypeRow.TRUNCATED_PARTICIPANT
+            ):
                 rows_to_drop.append(index)
 
             merged_rows += 1
             description = append_data(
-                description, row.loc[description_index].strip())
+                description, row.loc[description_index].strip()
+            )
             participant = append_data(
-                participant, row.loc[participant_index].strip())
+                participant, row.loc[participant_index].strip()
+            )
 
         # checagem extra
         # temos dois casos comuns de multiplas linhas truncadas, onde teremos
@@ -119,7 +138,10 @@ def merge_truncated(table: DataFrame, init_index: int) -> DataFrame:
         if merged_rows >= 3:
             break
         # quando trunca descrição segue o baile
-        elif index == row_to_append_index and prev_row['tipoDado'] != next_row['tipoDado']:
+        elif (
+            index == row_to_append_index
+            and prev_row["tipoDado"] != next_row["tipoDado"]
+        ):
             break
 
     # out of the loop return merged data
