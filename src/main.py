@@ -18,6 +18,23 @@ from extract import (
 )
 
 _log = logging.getLogger(__name__)
+pattern = re.compile(r"^(\d+\.\d[0-9.]*)( - )(.*$)")
+
+
+def extract_group_from_contacontabilcompleto(
+    pattern: re.Pattern, conta_contabil_completo: str, group: int
+) -> str | None:
+    """
+    Extracts a specific group from the 'ContaContabilCompleto' string.
+    The group is determined by the number of dots in the string.
+    """
+    match = re.match(
+        pattern,
+        conta_contabil_completo,
+    )
+    if match:
+        return match.group(group) if group <= len(match.groups()) else None
+    return None
 
 
 def main():
@@ -60,7 +77,9 @@ def main():
         table_output.columns = COLLUMNS
         # inserindo a colunas já com os tipos definidos
         table_output.insert(
-            0, "tipoDado", table_output.apply(identify_row, axis=1)
+            0,
+            "tipoDado",
+            table_output.apply(identify_row, axis=1),  # pyright: ignore
         )
         table_output.insert(
             0,
@@ -68,35 +87,34 @@ def main():
             table_output.apply(
                 lambda row: get_current_title(table_output, row),  # noqa
                 axis=1,
-            ),
+            ),  # pyright: ignore
         )
         # remover dados que não serão mais usados
         table_output.drop(
-            table_output[table_output["tipoDado"] != ExtracTypeRow.ROW].index,
+            table_output[table_output["tipoDado"] !=
+                         ExtracTypeRow.ROW].index,  # pyright: ignore
             inplace=True,
-        )
+        )  # pyright: ignore
         # no final insere as colunas sumárias da tabela
         table_output.insert(
             0,
             "ContaContabilDescritivo",
             table_output.apply(
-                lambda row: re.match(
-                    r"^(\d+\.\d[0-9.]*)( - )(.*$)",
-                    row["ContaContabilCompleto"],
-                ).group(3),
+                lambda row: extract_group_from_contacontabilcompleto(
+                    pattern, row["ContaContabilCompleto"], 3
+                ),
                 axis=1,
-            ),
+            ),  # pyright: ignore
         )
         table_output.insert(
             0,
             "ContaContabil",
             table_output.apply(
-                lambda row: re.match(
-                    r"^(\d+\.\d[0-9.]*)( - )(.*$)",
-                    row["ContaContabilCompleto"],
-                ).group(1),
+                lambda row: extract_group_from_contacontabilcompleto(
+                    pattern, row["ContaContabilCompleto"], 1
+                ),
                 axis=1,
-            ),
+            ),  # pyright: ignore
         )
         table_output.drop(
             columns=["tipoDado", "ContaContabilCompleto"], inplace=True

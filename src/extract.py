@@ -6,7 +6,7 @@ from pandas import DataFrame, Series
 from constants import ExtracTypeRow
 
 
-def get_current_title(table: DataFrame, row: Series) -> Series:
+def get_current_title(table: DataFrame, row: Series):
     for _, itRow in table[row.name :: -1].iterrows():
         type_row = itRow["tipoDado"]
         if type_row == ExtracTypeRow.TITLE:

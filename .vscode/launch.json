@@ -5,7 +5,7 @@
       "name": "docling",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/src/main-docling.py",
+      "program": "${workspaceFolder}/src/main.py",
       "console": "integratedTerminal"
     }
   ]
