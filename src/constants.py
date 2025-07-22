@@ -9,8 +9,6 @@ ExtracTypeRow = Enum(
         ("TITLE", 2),
         ("ROW", 3),
         ("HEADERS", 4),
-        ("TRUNCATED_DESCRIPTION", 5),
-        ("TRUNCATED_PARTICIPANT", 6),
         ("OTHERS", 7),
     ],
 )
