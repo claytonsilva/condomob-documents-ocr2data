@@ -193,17 +193,17 @@ def run(
     for i, page_path in enumerate(pdf_pages_list, start=1):
         print(f"Processing page {i} of {len(pdf_pages_list)}: {page_path}")
 
-        file_output = page_path.replace(".pdf", ".txt")
-        if not os.path.exists(file_output):
+        file_txt_output = page_path.replace(".pdf", ".txt")
+        if not os.path.exists(file_txt_output):
             print(f"Converting {page_path} to text...")
-            file_output = process_file(page_path)
+            file_txt_output = process_file(page_path)
 
-        if file_output != "":
-            blocks = split_blocks(openFile(file_output).getvalue())
-            print(
+        if file_txt_output != "":
+            file_csv_output = page_path.replace(".pdf", ".csv")
+            if not os.path.exists(file_csv_output):
+                blocks = split_blocks(openFile(file_txt_output).getvalue())
                 data_processing(
                     convert_list_to_dict(
                         [clean_table_text(block) for block in blocks]
                     )
-                ).to_csv()
-            )
+                ).to_csv(file_csv_output, index=False)
