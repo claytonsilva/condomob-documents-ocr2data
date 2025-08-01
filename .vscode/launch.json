@@ -6,7 +6,40 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/src/main.py",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "args": [
+        "analytical",
+        "run",
+        "${workspaceFolder}/files/page_30_preto_Demonstrativo_Analitico_de_Receitas_e_Despesas.pdf"
+      ]
+    },
+    {
+      "name": "split",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "spliter",
+        "run",
+        "${workspaceFolder}/files/2024-1.pdf",
+        "--start=20",
+        "--end=89"
+      ]
+    },
+    {
+      "name": "analytical-v2",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "analytical",
+        "run-v2",
+        "${workspaceFolder}/files/2024-1.pdf",
+        "--start=20",
+        "--end=20"
+      ]
     }
   ]
 }

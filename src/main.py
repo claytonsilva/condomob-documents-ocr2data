@@ -1,148 +1,49 @@
-import logging
-import re
-import time
-from pathlib import Path
+import typer
 
-import pandas as pd
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-    TesseractCliOcrOptions,
+from analytical import run as run_analytical
+from analytical_v2 import run as run_analytical_v2
+from spliter import split_pdf_to_pages
+
+app = typer.Typer()
+analytical_app = typer.Typer()
+spliter_app = typer.Typer()
+app.add_typer(analytical_app, name="analytical", help="Analytical commands")
+app.add_typer(spliter_app, name="spliter", help="Splitting commands")
+
+
+@analytical_app.command(
+    help="Run the analytical extraction process on a PDF file"
 )
-from docling.document_converter import DocumentConverter, PdfFormatOption
+def run(path: str):
+    run_analytical(path)
 
-from constants import COLLUMNS, ExtracTypeRow
-from extract import (
-    get_current_title,
-    identify_row,
+
+@analytical_app.command(
+    help="Run the analytical extraction process on a PDF file with a different approach"
 )
-
-_log = logging.getLogger(__name__)
-pattern = re.compile(r"^(\d+\.\d[0-9.]*)( - )(.*$)")
-
-
-def extract_group_from_contacontabilcompleto(
-    pattern: re.Pattern, conta_contabil_completo: str, group: int
-) -> str | None:
-    """
-    Extracts a specific group from the 'ContaContabilCompleto' string.
-    The group is determined by the number of dots in the string.
-    """
-    match = re.match(
-        pattern,
-        conta_contabil_completo,
-    )
-    if match:
-        return match.group(group) if group <= len(match.groups()) else None
-    return None
-
-
-def main():
-    logging.basicConfig(level=logging.INFO)
-
-    data_folder = Path(__file__).parent.parent / "files"
-    input_doc_path = data_folder / "2024-02-analitico-p60-teste-docling.pdf"
-    output_dir = Path(__file__).parent.parent / "output"
-
-    # Docling Parse with Tesseract
-    #    ----------------------
-    pipeline_options = PdfPipelineOptions()
-    pipeline_options.do_ocr = True
-    pipeline_options.do_table_structure = True
-    pipeline_options.table_structure_options.do_cell_matching = True
-    pipeline_options.ocr_options = TesseractCliOcrOptions(
-        lang=["lat", "por", "Latin"]
+def run_v2(
+    path: str,
+    output_dir: str = "output",
+    start: int = 1,
+    end: int | None = None,
+):
+    return run_analytical_v2(
+        path,
+        output_dir,
+        start,
+        end,
     )
 
-    doc_converter = DocumentConverter(
-        format_options={
-            InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)
-        }
-    )
 
-    start_time = time.time()
-
-    conv_res = doc_converter.convert(input_doc_path)
-
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    doc_filename = conv_res.input.file.stem
-
-    # Export tables
-    for table_ix, table in enumerate(conv_res.document.tables):
-        table_df: pd.DataFrame = table.export_to_dataframe()
-        print(f"## Table {table_ix}")
-        # Iremos fazer em cada tabela duas percorridas de loop
-        table_output = table_df.copy()
-        table_output.columns = COLLUMNS
-        # inserindo a colunas já com os tipos definidos
-        table_output.insert(
-            0,
-            "tipoDado",
-            table_output.apply(identify_row, axis=1),  # pyright: ignore
-        )
-        table_output.insert(
-            0,
-            "ContaContabilCompleto",
-            table_output.apply(
-                lambda row: get_current_title(table_output, row),  # noqa
-                axis=1,
-            ),  # pyright: ignore
-        )
-        # remover dados que não serão mais usados
-        table_output.drop(
-            table_output[table_output["tipoDado"] !=
-                         ExtracTypeRow.ROW].index,  # pyright: ignore
-            inplace=True,
-        )  # pyright: ignore
-        # no final insere as colunas sumárias da tabela
-        table_output.insert(
-            0,
-            "ContaContabilDescritivo",
-            table_output.apply(
-                lambda row: extract_group_from_contacontabilcompleto(
-                    pattern, row["ContaContabilCompleto"], 3
-                ),
-                axis=1,
-            ),  # pyright: ignore
-        )
-        table_output.insert(
-            0,
-            "ContaContabil",
-            table_output.apply(
-                lambda row: extract_group_from_contacontabilcompleto(
-                    pattern, row["ContaContabilCompleto"], 1
-                ),
-                axis=1,
-            ),  # pyright: ignore
-        )
-        table_output.drop(
-            columns=["tipoDado", "ContaContabilCompleto"], inplace=True
-        )
-
-        print(table_output.to_markdown())
-
-        # Save the table as csv
-        element_csv_filename = (
-            output_dir / f"{doc_filename}-table-{table_ix + 1}.csv"
-        )
-        _log.info(f"Saving CSV table to {element_csv_filename}")
-        table_output.to_csv(element_csv_filename)
-
-        # Save the table as html
-        element_html_filename = (
-            output_dir / f"{doc_filename}-table-{table_ix + 1}.html"
-        )
-        _log.info(f"Saving HTML table to {element_html_filename}")
-        with element_html_filename.open("w") as fp:
-            fp.write(table.export_to_html(doc=conv_res.document))
-
-    end_time = time.time() - start_time
-
-    _log.info(
-        f"Document converted and tables exported in {end_time:.2f} seconds."
-    )
+@spliter_app.command(name="run", help="Split a PDF file into individual pages")
+def run_split(
+    path: str,
+    output_dir: str = "output",
+    start: int = 1,
+    end: int | None = None,
+):
+    split_pdf_to_pages(path, output_dir, start, end)
 
 
 if __name__ == "__main__":
-    main()
+    app()
