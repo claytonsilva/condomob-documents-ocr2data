@@ -1,23 +1,28 @@
+import csv
 import math
 import os
 import re
+import shutil
+from collections import defaultdict
 from io import StringIO
 
 import pandas as pd
 
 from constants import COLLUMNS
 from extract import extract_group_from_contacontabilcompleto, validate
+from gcp import upload_csv_to_bigquery
 from llmwhisperer import process_file
 from spliter import split_pdf_to_pages
 
-pattern_account = re.compile(r"(^[1-2]\.[0-9]+ - .*$)")
-pattern_account_grouped = re.compile(r"^(\d+\.\d[0-9]+)( - )(.*$)")
+pattern_account = re.compile(r"(^[1-2][\.[0-9]+]* - .*$)")
+pattern_account_grouped = re.compile(r"^(\d+[\.\d[0-9]+]*)( - )(.*$)")
 pattern_split = re.compile(
-    r"^([ ]*[1-2]\.[0-9]+ - .*$)\n\n", flags=re.MULTILINE
+    r"^([ ]*[1-2][\.[0-9]+]* - .*$)\n\n", flags=re.MULTILINE
 )
 pattern_table_text = re.compile(r"(^\+-|^\|)", flags=re.MULTILINE)
 pattern_table_separator = re.compile(r"^\+-", flags=re.MULTILINE)
 pattern_total_cell = re.compile(r"^TOTAL", flags=re.MULTILINE)
+pattern_untitled_table_mixed = re.compile(r"\n\n", flags=re.MULTILINE)
 
 
 def openFile(path: str) -> StringIO:
@@ -45,10 +50,23 @@ def clean_table_text(text: str) -> str:
         return "\n".join(
             [
                 block
-                for block in re.split(r"\n", text)
+                for block in re.split(r"\n", extract_untitled_table(text))
                 if re.match(pattern_table_text, block)
             ]
         )
+    return text
+
+
+def extract_untitled_table(text: str) -> str:
+    """
+    Extrai a tabela sem título do texto, removendo os parágrafos adicionais.
+
+    As tables vem com a estrutura da tabelas ASCII seguido de dois paragrafos,
+    caso tenha uma tabela sem titulo, ela será detectada como uma tabela anexada à primeira e deve ser removida.
+    então será aplicado inicialmente split para extrair somente a primeira tabela.
+    """
+    if re.search(pattern_untitled_table_mixed, text):
+        return re.split(pattern_untitled_table_mixed, text)[0]
     return text
 
 
@@ -107,6 +125,49 @@ def strip_string_cells(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def strip_columns_names(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Remove espaços em branco no início e no final dos nomes das colunas do DataFrame.
+    """
+    df.columns = df.columns.str.strip()
+    return df
+
+
+def find_similar_columns(lst: list[str], pattern: re.Pattern) -> dict:
+    """
+    Encontra colunas similares em uma lista de strings e retorna um dicionário com as colunas agrupadas.
+    """
+    grouped_items = defaultdict(list)
+    for item in lst:
+        if re.search(pattern, item):
+            prefix = re.split(pattern, item)[0]
+            grouped_items[prefix].append(item)
+    return grouped_items
+
+
+def get_first_not_null_value(
+    df: pd.DataFrame, index: int, input_list: list[str]
+):
+    for col in input_list:
+        value = df.at[index, col]
+        if (
+            value is not None or math.isnan(value) or value == ""
+        ):  # Check for non-null value
+            return value.strip() if isinstance(value, str) else value
+    return None  # Return None if no non-null value is found
+
+
+def clean_total_ascii_table(table: str) -> str:
+    """
+    Limpa a tabela ASCII removendo a linha de totalização.
+    """
+    lines = table.split("\n")
+    cleaned_lines = [
+        line for line in lines if not re.match(pattern_total_cell, line)
+    ]
+    return "\n".join(cleaned_lines) if cleaned_lines else ""
+
+
 def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
     """
     Converte uma tabela ASCII em um DataFrame do pandas.
@@ -117,31 +178,119 @@ def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
         for i, line in enumerate(lines)  # jump header line
         if re.match(pattern_table_separator, line)
     ]
-    df = pd.read_csv(
-        StringIO(table),
-        sep="|",
-        skipinitialspace=True,
-        engine="python",
-        skiprows=lines_to_skip,
-        index_col=0,
-        dtype=str,
-    ).reset_index(drop=True)
-    if "Descrição Participante" in df.columns.str.strip():
-        df.rename(
-            columns={
-                "Descrição Participante": "Descrição",
-            },
-            inplace=True,
-        )
-        df.insert(loc=2, column="Participante", value="")
+    df = strip_columns_names(
+        pd.read_csv(
+            StringIO(table),
+            sep="|",
+            skipinitialspace=True,
+            engine="python",
+            skiprows=lines_to_skip,
+            index_col=0,
+            dtype=str,
+        ).reset_index(drop=True)
+    )
+    df = drop_invalid_rows(df)  # type: ignore
+    columns_from_txt: list[str] = df.columns.str.strip().to_list()[
+        :-1
+    ]  # remove last column because is aways empty
+    # situações de falha de processamento que necessita de tratamento
+    if columns_from_txt != COLLUMNS.to_list():
+        # falha de processamento que gera coluna repetida
+        if (
+            len(
+                list(
+                    filter(
+                        lambda el: re.search(r"( \.[0-9]+)$", el),
+                        columns_from_txt,
+                    )
+                )
+            )
+            > 0
+        ):
+            print("Processing error: duplicate column title found., fixing...")
+            repeated_columns = find_similar_columns(
+                columns_from_txt, re.compile(r"( \.[0-9]+)$")
+            )
+            for key, value in repeated_columns.items():
+                columns_not_empty = []
+                for column in value:
+                    if df[column].isna().all():  # type: ignore
+                        columns_not_empty.append(column)
+                for item in df[key].index:
+                    if (
+                        df.at[item, key] is None
+                        or math.isnan(df.at[item, key])
+                        or df.at[item, key] == ""
+                    ):
+                        df.at[item, key] = get_first_not_null_value(
+                            df, item, columns_not_empty
+                        )
+                df.drop(columns=value, inplace=True)
+                print(f"finished removing duplicate columns for {key}")
+                columns_from_txt = df.columns.str.strip().to_list()[
+                    :-1
+                ]  # remove last column because is aways empty
+        # falha de processamento quando funde duas colunas  Descrição e Participante
+        if "Descrição Participante" in df.columns.str.strip():
+            print(
+                "Processing error: 'Descrição Participante' column found., fixing..."
+            )
+            df.rename(
+                columns={
+                    "Descrição Participante": "Descrição",
+                },
+                inplace=True,
+            )
+            df.insert(loc=2, column="Participante", value="")
+            print("Fixed 'Descrição Participante' column.")
+            columns_from_txt = df.columns.str.strip().to_list()[
+                :-1
+            ]  # remove last column because is aways empty
+
+        # falha de processamento que gera coluna vazia no meio da tabela
+        if (
+            len(
+                list(
+                    filter(
+                        lambda el: re.search(r"^Unnamed", el), columns_from_txt
+                    )
+                )
+            )
+            > 0
+        ):
+            print("Processing error: empty column title found., fixing...")
+            if df["Valor"].isna().all():  # type: ignore
+                print("Iniciando movimentação de dados para coluna correta")
+                df.drop(columns=["Valor"], inplace=True)
+                for index, column in reversed(
+                    list(enumerate(columns_from_txt))
+                ):  # type: ignore
+                    if re.search(r"^Unnamed", column):
+                        break
+                    df.rename(
+                        columns={
+                            columns_from_txt[index - 1]: columns_from_txt[
+                                index
+                            ],
+                        },
+                        inplace=True,
+                    )
+                print("Colunas movimentadas com sucesso.. continuando...")
+            else:
+                print(
+                    "Situação não tratada: coluna Valor preenchida, por enquanto deixa como está"
+                )
+            columns_from_txt = df.columns.str.strip().to_list()[
+                :-1
+            ]  # remove last column because is aways empty
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     df.columns = COLLUMNS
     return strip_string_cells(
-        concat_dataframe_cells(drop_invalid_rows(df))  # type: ignore
+        concat_dataframe_cells(df)  # type: ignore
     )
 
 
-def data_processing(data: dict) -> pd.DataFrame:
+def data_processing(data: dict, filename: str) -> pd.DataFrame:
     """
     Processa os dados do dicionário e retorna um DataFrame do pandas.
     """
@@ -160,6 +309,7 @@ def data_processing(data: dict) -> pd.DataFrame:
                     pattern_account_grouped, key, 1
                 )
             )
+            inner_data["file"] = filename
             inner_data.drop(columns=["ContaContabilCompleto"], inplace=True)
             return_data = pd.concat(
                 [return_data, inner_data], ignore_index=True
@@ -170,8 +320,22 @@ def data_processing(data: dict) -> pd.DataFrame:
         .replace(to_replace=r",", value=".", regex=True)
         .astype(pd.Float64Dtype())
     )
+    return_data["ContaContabil"] = return_data["ContaContabil"].astype(str)
+    return_data["Documento"] = return_data["Documento"].astype(str)
     return_data["Data"] = pd.to_datetime(
         return_data["Data"], format="%d/%m/%Y"
+    )
+    return_data.rename(
+        columns={
+            "Descrição": "Descricao",
+        },
+        inplace=True,
+    )
+    return_data.rename(
+        columns={
+            "Período": "Periodo",
+        },
+        inplace=True,
     )
     return_data.fillna("", inplace=True)
     return return_data
@@ -182,7 +346,12 @@ def run(
     output_dir: str,
     start: int = 0,
     end: int | None = None,
+    upload: bool = False,
+    reprocess: bool = False,
+    processed_dir: str = "processed",
 ) -> None:
+    os.makedirs(processed_dir, exist_ok=True)
+
     pdf_pages_list = split_pdf_to_pages(
         input_pdf_path=path,
         output_dir=output_dir,
@@ -194,16 +363,62 @@ def run(
         print(f"Processing page {i} of {len(pdf_pages_list)}: {page_path}")
 
         file_txt_output = page_path.replace(".pdf", ".txt")
-        if not os.path.exists(file_txt_output):
-            print(f"Converting {page_path} to text...")
-            file_txt_output = process_file(page_path)
+        file_txt_processed_output = file_txt_output.replace(
+            output_dir, processed_dir
+        )
 
+        if not os.path.exists(file_txt_output) or reprocess:
+            # restore the file if it was processed before
+            if reprocess and os.path.exists(file_txt_processed_output):
+                print(f"Revert {page_path} txt from processed dir...")
+                shutil.move(file_txt_processed_output, file_txt_output)
+            else:
+                print(f"Converting {page_path} to text...")
+                file_txt_output = process_file(page_path)
+            shutil.move(
+                page_path, page_path.replace(output_dir, processed_dir)
+            )
         if file_txt_output != "":
             file_csv_output = page_path.replace(".pdf", ".csv")
-            if not os.path.exists(file_csv_output):
-                blocks = split_blocks(openFile(file_txt_output).getvalue())
-                data_processing(
-                    convert_list_to_dict(
-                        [clean_table_text(block) for block in blocks]
+            file_csv_processed_output = file_csv_output.replace(
+                output_dir, processed_dir
+            )
+            if not os.path.exists(file_csv_output) or reprocess:
+                if reprocess and os.path.exists(file_csv_processed_output):
+                    print(f"Revert {page_path} csv from processed dir...")
+                    shutil.move(
+                        file_csv_processed_output,
+                        file_csv_output,
                     )
-                ).to_csv(file_csv_output, index=False)
+                else:
+                    blocks = split_blocks(openFile(file_txt_output).getvalue())
+                    data_processing(
+                        convert_list_to_dict(
+                            [clean_table_text(block) for block in blocks]
+                        ),
+                        os.path.basename(file_csv_output),
+                    ).to_csv(
+                        file_csv_output,
+                        index=False,
+                        quoting=csv.QUOTE_NONNUMERIC,
+                    )
+                shutil.move(
+                    file_txt_output,
+                    file_txt_processed_output,
+                )
+
+            if (
+                upload
+                and not os.path.exists(file_csv_output)
+                and not reprocess
+            ):
+                print("you need to reprocess the file to upload it")
+
+            if upload and os.path.exists(file_csv_output):
+                print(f"Uploading {file_csv_output} to BigQuery...")
+                upload_csv_to_bigquery(file_csv_output)
+                print("Uploaded to BigQuery.")
+                shutil.move(
+                    file_csv_output,
+                    file_csv_output.replace(output_dir, processed_dir),
+                )

@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from unstract.llmwhisperer import LLMWhispererClientV2
 from unstract.llmwhisperer.client_v2 import LLMWhispererClientException
 
@@ -11,7 +10,6 @@ def process_file(path: str) -> str:
     Returns:
         str: The response from the LLMWhispererClientV2.
     """
-    load_dotenv()  # take environment variables
     # read more about llmwhisperer client configuration variables
 
     # os.environ["LLMWHISPERER_API_VERSION"] = dotenv_values().get("LLMWHISPERER_API_VERSION", "v2")

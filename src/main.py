@@ -1,4 +1,5 @@
 import typer
+from dotenv import load_dotenv
 
 from analytical import run as run_analytical
 from analytical_v2 import run as run_analytical_v2
@@ -26,12 +27,17 @@ def run_v2(
     output_dir: str = "output",
     start: int = 1,
     end: int | None = None,
+    upload: bool = False,
+    reprocess: bool = False,
 ):
     return run_analytical_v2(
         path,
         output_dir,
         start,
         end,
+        upload=upload,
+        reprocess=reprocess,
+        processed_dir="processed",
     )
 
 
@@ -46,4 +52,5 @@ def run_split(
 
 
 if __name__ == "__main__":
+    load_dotenv()  # Load environment variables from .env file
     app()

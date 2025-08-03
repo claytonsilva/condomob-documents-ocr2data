@@ -37,8 +37,9 @@
         "analytical",
         "run-v2",
         "${workspaceFolder}/files/2024-1.pdf",
-        "--start=20",
-        "--end=20"
+        "--start=57",
+        "--end=57",
+        "--reprocess"
       ]
     }
   ]
