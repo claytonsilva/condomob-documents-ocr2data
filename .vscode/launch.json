@@ -22,7 +22,7 @@
       "args": [
         "spliter",
         "run",
-        "${workspaceFolder}/files/2024-1.pdf",
+        "${workspaceFolder}/files/2024-2.pdf",
         "--start=20",
         "--end=89"
       ]
@@ -36,9 +36,13 @@
       "args": [
         "analytical",
         "run-v2",
-        "${workspaceFolder}/files/2024-1.pdf",
-        "--start=57",
-        "--end=57",
+        "${workspaceFolder}/files/2024-2.pdf",
+        "--start=44",
+        "--end=44",
+        "--output-dir",
+        "${workspaceFolder}/output",
+        "--processed-dir",
+        "${workspaceFolder}/processed",
         "--reprocess"
       ]
     }
