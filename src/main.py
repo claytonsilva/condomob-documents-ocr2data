@@ -28,6 +28,7 @@ def run_v2(
     start: int = 1,
     end: int | None = None,
     upload: bool = False,
+    processed_dir: str = "processed",
     reprocess: bool = False,
 ):
     return run_analytical_v2(
@@ -37,7 +38,7 @@ def run_v2(
         end,
         upload=upload,
         reprocess=reprocess,
-        processed_dir="processed",
+        processed_dir=processed_dir,
     )
 
 
