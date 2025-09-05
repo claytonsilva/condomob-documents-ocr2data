@@ -2,8 +2,10 @@ import typer
 from dotenv import load_dotenv
 
 from analytical import run as run_analytical
-from analytical_v2 import run as run_analytical_v2
-from spliter import split_pdf_to_pages
+from processors.docling_analytical import process_file as process_file_docling
+from processors.llmwhisperer import process_file as processs_file_llmwhisperer
+from utils.constants import MethodType
+from utils.spliter import split_pdf_to_pages
 
 app = typer.Typer()
 analytical_app = typer.Typer()
@@ -13,16 +15,9 @@ app.add_typer(spliter_app, name="spliter", help="Splitting commands")
 
 
 @analytical_app.command(
-    help="Run the analytical extraction process on a PDF file"
-)
-def run(path: str):
-    run_analytical(path)
-
-
-@analytical_app.command(
     help="Run the analytical extraction process on a PDF file with a different approach"
 )
-def run_v2(
+def run(
     path: str,
     output_dir: str = "output",
     start: int = 1,
@@ -30,8 +25,9 @@ def run_v2(
     upload: bool = False,
     processed_dir: str = "processed",
     reprocess: bool = False,
+    method: MethodType = MethodType.llmwhisperer,
 ):
-    return run_analytical_v2(
+    return run_analytical(
         path,
         output_dir,
         start,
@@ -39,6 +35,9 @@ def run_v2(
         upload=upload,
         reprocess=reprocess,
         processed_dir=processed_dir,
+        process_file_fn=processs_file_llmwhisperer
+        if method == MethodType.llmwhisperer
+        else process_file_docling,
     )
 
 

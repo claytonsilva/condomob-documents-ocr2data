@@ -2,10 +2,14 @@
 name = "realpark-analysis"
 version = '0.0.0'
 description = 'Repositório de automações do a dia a dia'
-authors = ["clayton@xdevel.com.br"]
+authors = ["clayton@cavaleiro.dev"]
 license = "MIT"
 readme = "README.md"
 package-mode = false
+# packages = [
+#     { include = "realpark-analysis" },
+#     { include = "src/**/*.py" },
+# ]
 
 [tool.poetry.dependencies]
 python = '^3.12'
@@ -103,7 +107,7 @@ docstring-code-format = true
 docstring-code-line-length = 30
 
 [tool.coverage.run]
-omit = ['src/**/tests/**', 'src/**/settings/**', 'src/**/migrations/**']
+omit = ['tests/**', 'src/**/settings/**', 'src/**/migrations/**']
 branch = true
 relative_files = true
 

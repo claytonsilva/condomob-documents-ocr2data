@@ -3,7 +3,7 @@ import tempfile
 
 from pypdf import PdfWriter
 
-from spliter import split_pdf_to_pages
+from utils.spliter import split_pdf_to_pages
 
 
 def create_sample_pdf(path, num_pages=3):
