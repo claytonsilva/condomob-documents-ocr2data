@@ -2,12 +2,11 @@ from unittest.mock import MagicMock, patch
 
 from unstract.llmwhisperer.client_v2 import LLMWhispererClientException
 
-from llmwhisperer import process_file
+from processors.llmwhisperer import process_file
 
 
-@patch("llmwhisperer.LLMWhispererClientV2")
-@patch("llmwhisperer.load_dotenv")
-def test_process_file_success(mock_load_dotenv, mock_client_cls, tmp_path):
+@patch("processors.llmwhisperer.LLMWhispererClientV2")
+def test_process_file_success(mock_client_cls, tmp_path):
     # Arrange
     mock_client = MagicMock()
     mock_client.whisper.return_value = {
@@ -26,7 +25,7 @@ def test_process_file_success(mock_load_dotenv, mock_client_cls, tmp_path):
         assert f.read() == "extracted text"
 
 
-@patch("llmwhisperer.LLMWhispererClientV2")
+@patch("processors.llmwhisperer.LLMWhispererClientV2")
 def test_process_file_exception(mock_client_cls, tmp_path):
     # Arrange
     mock_client = MagicMock()
@@ -38,4 +37,3 @@ def test_process_file_exception(mock_client_cls, tmp_path):
     output_path = process_file(str(test_pdf))
     # Assert
     assert output_path == ""
-

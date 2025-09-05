@@ -12,6 +12,11 @@ ExtracTypeRow = Enum(
         ("OTHERS", 7),
     ],
 )
-COLLUMNS = Series(
+COLLUMNS_ANALYTICAL = Series(
     ["Data", "Descrição", "Participante", "Documento", "Período", "Valor"]
 )
+
+
+class MethodType(str, Enum):
+    llmwhisperer = "llmwhisperer"
+    docling = "docling"

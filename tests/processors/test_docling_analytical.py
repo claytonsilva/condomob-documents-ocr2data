@@ -1,10 +1,10 @@
 from pandas import DataFrame, Series
 
-from constants import ExtracTypeRow
-from extract import (
+from processors.docling_analytical import (
     get_current_title,
     identify_row,
 )
+from utils.constants import ExtracTypeRow
 
 # Teste quando a própria linha é um título
 
