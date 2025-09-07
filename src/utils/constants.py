@@ -2,6 +2,15 @@ from enum import Enum
 
 from pandas import Series
 
+FileType = Enum(
+    "FILE_TYPE",
+    [
+        ("PDF", ".pdf"),
+        ("TXT", ".txt"),
+        ("CSV", ".csv"),
+    ],
+)
+
 ExtracTypeRow = Enum(
     "EXTRACTED_TYPE_ROW",
     [

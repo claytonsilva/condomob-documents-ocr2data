@@ -5,6 +5,7 @@ and extracting tables from the document.
 """
 
 import logging
+import os
 import re
 
 import pandas as pd
@@ -62,7 +63,7 @@ def identify_row(line: Series) -> ExtracTypeRow | None:
         return ExtracTypeRow.OTHERS
 
 
-def process_file(path: str):
+def process_pdf_file(input_path: str, output_path: str):
     """
     Main function to convert a PDF document and extract tables.
     It uses the Docling library to parse the PDF and Tesseract for OCR.
@@ -95,7 +96,7 @@ def process_file(path: str):
         }
     )
 
-    conv_res = doc_converter.convert(path)
+    conv_res = doc_converter.convert(input_path)
 
     # Export tables
     for table_ix, table in enumerate(conv_res.document.tables):
@@ -148,4 +149,5 @@ def process_file(path: str):
             columns=["tipoDado", "ContaContabilCompleto"], inplace=True
         )
 
-        return table_output.to_csv()
+        table_output.to_csv(output_path)
+        return output_path

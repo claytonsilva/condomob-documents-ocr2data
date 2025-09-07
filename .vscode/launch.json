@@ -28,6 +28,20 @@
       ]
     },
     {
+      "name": "analytical-reprocess",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "analytical",
+        "reprocess",
+        "${workspaceFolder}/output",
+        "--output-dir",
+        "${workspaceFolder}/output"
+      ]
+    },
+    {
       "name": "analytical-v2",
       "type": "python",
       "request": "launch",
@@ -35,7 +49,7 @@
       "console": "integratedTerminal",
       "args": [
         "analytical",
-        "run-v2",
+        "run",
         "${workspaceFolder}/files/2024-2.pdf",
         "--start=44",
         "--end=44",
