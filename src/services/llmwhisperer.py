@@ -2,7 +2,7 @@ from unstract.llmwhisperer import LLMWhispererClientV2
 from unstract.llmwhisperer.client_v2 import LLMWhispererClientException
 
 
-def process_file(path: str) -> str:
+def process_pdf_file(input_path: str, output_path: str) -> str:
     """
     Process a file using the LLMWhispererClientV2.
     Args:
@@ -41,16 +41,15 @@ def process_file(path: str) -> str:
     client = LLMWhispererClientV2()
     try:
         result = client.whisper(
-            file_path=path,
+            file_path=input_path,
             mode="table",
             lang="por",
             wait_for_completion=True,
             wait_timeout=200,
         )
-        file_output = path.replace(".pdf", ".txt")
-        with open(file_output, "w") as out_file:
+        with open(output_path, "w") as out_file:
             out_file.write(result["extraction"]["result_text"])
-        return file_output
+        return output_path
     except LLMWhispererClientException as e:
         print(e)
         return ""
