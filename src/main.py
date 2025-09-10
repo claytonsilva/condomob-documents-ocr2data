@@ -45,7 +45,6 @@ def run(
         output_dir,
         start,
         end,
-        upload=upload,
         reprocess=reprocess,
         processed_dir=processed_dir,
         process_pdf_file_fn=process_pdf_file_llmwhisperer
@@ -54,6 +53,13 @@ def run(
         process_txt_file_fn=process_txt_file_llmwhisperer
         if method == MethodType.llmwhisperer
         else None,
+        analytical_accounts_configuration=os.environ[
+            "GOOGLE_SHEET_ACCOUNT_PLAN_ANALYTICAL_URL"
+        ],
+        analytical_units_renamed_list=os.environ[
+            "GOOGLE_SHEET_RENAMED_UNITS_ANALYTICAL_URL"
+        ],
+        upload=upload,
         client=client,
     )
 
