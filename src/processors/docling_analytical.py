@@ -5,7 +5,6 @@ and extracting tables from the document.
 """
 
 import logging
-import os
 import re
 
 import pandas as pd

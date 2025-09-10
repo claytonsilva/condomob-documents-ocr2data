@@ -2,6 +2,7 @@ import os
 
 import typer
 from dotenv import load_dotenv
+from google.cloud import bigquery
 
 from analytical import reprocess as reprocess_analytical
 from analytical import run as run_analytical
@@ -37,6 +38,8 @@ def run(
     reprocess: bool = False,
     method: MethodType = MethodType.llmwhisperer,
 ):
+    client = bigquery.Client("realpark-dev")
+
     return run_analytical(
         path,
         output_dir,
@@ -51,6 +54,7 @@ def run(
         process_txt_file_fn=process_txt_file_llmwhisperer
         if method == MethodType.llmwhisperer
         else None,
+        client=client,
     )
 
 
@@ -62,7 +66,12 @@ def reprocess(
     output_dir: str = os.path.join(os.getcwd(), "output"),
     method: MethodType = MethodType.llmwhisperer,
     file_type: FileType = FileType.TXT,
+    upload: bool = False,
 ):
+    client = bigquery.Client(
+        "realpark-dev"
+    )  # TODO create env variable to store project info
+
     return reprocess_analytical(
         path,
         output_dir,
@@ -73,6 +82,14 @@ def reprocess(
         if method == MethodType.llmwhisperer
         else None,
         file_type=file_type,
+        analytical_accounts_configuration=os.environ[
+            "GOOGLE_SHEET_ACCOUNT_PLAN_ANALYTICAL_URL"
+        ],
+        analytical_units_renamed_list=os.environ[
+            "GOOGLE_SHEET_RENAMED_UNITS_ANALYTICAL_URL"
+        ],
+        upload=upload,
+        client=client,
     )
 
 

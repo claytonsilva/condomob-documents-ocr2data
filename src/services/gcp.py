@@ -1,11 +1,29 @@
 from google.cloud import bigquery
 
 
-def upload_csv_to_bigquery(csv_path):
+def clear_data_analytical_from_file(
+    client: bigquery.Client,
+    file: str,
+):
+    dataset_id = "realpark"
+    table_id = "analytical"
+    table_ref = f"{client.project}.{dataset_id}.{table_id}"
+
+    query = f"""
+        delete from `{table_ref}` where file = '{file}'
+    """
+
+    query_job = client.query(query)  # API request
+
+    results = query_job.result()  # Waits for job to complete
+
+    print(results)
+
+
+def upload_csv_to_bigquery(client: bigquery.Client, csv_path: str):
     """
     Faz upload de um arquivo CSV para a tabela 'analytical' no dataset 'realpark', projeto 'realpark-dev' no BigQuery.
     """
-    client = bigquery.Client(project="realpark-dev")
     dataset_id = "realpark"
     table_id = "analytical"
     table_ref = f"{client.project}.{dataset_id}.{table_id}"
@@ -22,4 +40,3 @@ def upload_csv_to_bigquery(csv_path):
         )
 
     job.result()  # Waits for the job to complete
-

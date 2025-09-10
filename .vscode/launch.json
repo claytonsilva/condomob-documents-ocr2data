@@ -38,7 +38,9 @@
         "reprocess",
         "${workspaceFolder}/output",
         "--output-dir",
-        "${workspaceFolder}/output"
+        "${workspaceFolder}/output",
+        "--file-type",
+        ".csv"
       ]
     },
     {
