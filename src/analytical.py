@@ -2,13 +2,19 @@ import os
 import shutil
 from types import FunctionType
 
+from google.cloud import bigquery
+
 from processors.llmwhisperer_analytical import (
     process_txt_file as process_txt_file_llmwhisperer,
 )
-from services.gcp import upload_csv_to_bigquery
+from services.gcp import (
+    clear_data_analytical_from_file,
+    upload_csv_to_bigquery,
+)
 from services.llmwhisperer import (
     process_pdf_file as process_pdf_file_llmwhisperer,
 )
+from transformers.analytical import transform_generated_analytical_data
 from utils.constants import FileType
 from utils.spliter import split_pdf_to_pages
 
@@ -27,6 +33,10 @@ def reprocess(
     process_txt_file_fn: FunctionType | None,
     process_pdf_file_fn: FunctionType,
     file_type: FileType,
+    analytical_accounts_configuration: str,
+    analytical_units_renamed_list: str,
+    upload: bool,
+    client: bigquery.Client,
 ) -> None:
     files: list[str] = [
         os.path.join(source_dir, file)
@@ -65,9 +75,20 @@ def reprocess(
                         ),
                     )
             case FileType.CSV:
-                print(f"Uploading {page_path} to BigQuery...")
-                upload_csv_to_bigquery(page_path)
-                print("Uploaded to BigQuery.")
+                # If necessary a transform pipeline will change csv with auxiliary information
+                transform_generated_analytical_data(
+                    page_path,
+                    analytical_accounts_configuration,
+                    analytical_units_renamed_list,
+                )
+                if upload:
+                    print(f"Deleting existing data from {page_path}")
+                    clear_data_analytical_from_file(
+                        client, os.path.basename(page_path)
+                    )
+                    print(f"Uploading {page_path} to BigQuery...")
+                    upload_csv_to_bigquery(client, page_path)
+                    print("Uploaded to BigQuery.")
                 shutil.move(
                     page_path,
                     os.path.join(output_dir, os.path.basename(page_path)),
@@ -79,11 +100,15 @@ def run(
     output_dir: str,
     start: int,
     end: int | None,
-    upload: bool,
+    # TODO remove option reprocess from run command, use only method reprocess for that
     reprocess: bool,
     processed_dir: str,
-    process_txt_file_fn: FunctionType | None = None,
-    process_pdf_file_fn: FunctionType = process_pdf_file_llmwhisperer,
+    process_txt_file_fn: FunctionType | None,
+    process_pdf_file_fn: FunctionType,
+    upload: bool,
+    analytical_accounts_configuration: str,
+    analytical_units_renamed_list: str,
+    client: bigquery.Client,
 ) -> None:
     os.makedirs(processed_dir, exist_ok=True)
 
@@ -137,13 +162,18 @@ def run(
                 else:
                     if process_txt_file_fn is not None:
                         print(f"Converting {page_path} to csv...")
-                        file_csv_output = process_txt_file_llmwhisperer(
-                            file_txt_output
-                        )
+                        file_csv_output = process_txt_file_fn(file_txt_output)
                 shutil.move(
                     file_txt_output,
                     file_txt_processed_output,
                 )
+
+            # If necessary a transform pipeline will change csv with auxiliary information
+            transform_generated_analytical_data(
+                file_csv_output,
+                analytical_accounts_configuration,
+                analytical_units_renamed_list,
+            )
 
             if (
                 upload
@@ -154,7 +184,7 @@ def run(
 
             if upload and os.path.exists(file_csv_output):
                 print(f"Uploading {file_csv_output} to BigQuery...")
-                upload_csv_to_bigquery(file_csv_output)
+                upload_csv_to_bigquery(client, file_csv_output)
                 print("Uploaded to BigQuery.")
                 shutil.move(
                     file_csv_output,
