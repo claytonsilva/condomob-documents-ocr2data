@@ -168,12 +168,12 @@ def run(
                     file_txt_processed_output,
                 )
 
-                # If necessary a transform pipeline will change csv with auxiliary information
-                transform_generated_analytical_data(
-                    page_path,
-                    analytical_accounts_configuration,
-                    analytical_units_renamed_list,
-                )
+            # If necessary a transform pipeline will change csv with auxiliary information
+            transform_generated_analytical_data(
+                file_csv_output,
+                analytical_accounts_configuration,
+                analytical_units_renamed_list,
+            )
 
             if (
                 upload
