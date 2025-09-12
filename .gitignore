@@ -7,3 +7,4 @@ htmlcov
 output
 processed
 .env
+coverage.xml

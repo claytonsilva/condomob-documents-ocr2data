@@ -292,9 +292,7 @@ def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
             ]  # remove last column because is aways empty
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
     df.columns = COLLUMNS
-    return strip_string_cells(
-        concat_dataframe_cells(df)  # type: ignore
-    )
+    return strip_string_cells(concat_dataframe_cells(df))  # type: ignore
 
 
 def data_processing(data: dict, filename: str) -> pd.DataFrame:
