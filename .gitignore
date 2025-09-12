@@ -8,3 +8,5 @@ output
 processed
 .env
 coverage.xml
+.mypy_cache
+.ruff_cache
