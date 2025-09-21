@@ -14,7 +14,7 @@ from utils.extract_utils import (
     validate,
 )
 
-pattern_account_grouped = re.compile(r"^(\d+[\.\d[0-9]+]*)( - )(.*$)")
+pattern_account_grouped = re.compile(r"^(\d+[\.\d+]*)( - )(.*$)")
 pattern_split = re.compile(
     r"^([ ]*[1-2][\.[0-9]+]* - .*$)\n\n", flags=re.MULTILINE
 )
@@ -73,14 +73,15 @@ def concat_dataframe_cells(df: pd.DataFrame) -> pd.DataFrame:
         for column in df.columns:
             if (
                 isinstance(df.at[line, column], str)
-                and df.at[line, column].strip() != ""
+                and str(df.at[line, column]).strip() != ""
                 and not isinstance(df.at[line, "Data"], str)
+                # TODO: solve this alert
                 and math.isnan(df.at[line, "Data"])
             ):
                 df.at[line - 1, column] = (
-                    df.at[line - 1, column].strip()
+                    str(df.at[line - 1, column]).strip()
                     + " "
-                    + df.at[line, column].strip()
+                    + str(df.at[line, column]).strip()
                 )
                 drop_row = True
         if drop_row:
