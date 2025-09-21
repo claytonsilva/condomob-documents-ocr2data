@@ -11,8 +11,9 @@ regex_old_unit_format = re.compile(r"^(Un. )(\d*-QD\d*-LT\d*)$")
 def rename_unit(
     participante: str, matched_units: pandas.DataFrame | pandas.Series
 ) -> str:
-    for el in matched_units["Participante"]:
-        return el
+    if participante:
+        for el in matched_units["Participante"]:
+            return el
     return participante  # short circuit to preserve original name if list is empty
 
 
@@ -68,7 +69,7 @@ def transform_generated_analytical_data(
     if not accounts_configuration.empty or not units_to_rename.empty:
         csv_to_transform: pandas.DataFrame = pandas.read_csv(
             csv_page_path, dtype=str
-        )
+        ).fillna("")
         table_output = csv_to_transform.copy()
 
         if not units_to_rename.empty:
