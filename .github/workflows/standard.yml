@@ -10,7 +10,7 @@ on:
     paths-ignore:
       - "**/*.md"
       - ".scafflater/**"
-  workflow_dispatch:
+    types: [opened, synchronize, reopened]
 
 name: Standard
 
