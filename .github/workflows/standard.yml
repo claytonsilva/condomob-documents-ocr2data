@@ -43,6 +43,7 @@ jobs:
       # TODO enable lint command
       # - name: Lint
       #   run: make lint
+      # only scan test
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
