@@ -11,6 +11,7 @@ on:
       - "**/*.md"
       - ".scafflater/**"
     types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 name: Standard
 
