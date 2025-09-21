@@ -14,7 +14,7 @@ from utils.extract_utils import (
     validate,
 )
 
-pattern_account_grouped = re.compile(r"^(\d+[\.\d+]*)( - )(.*$)")
+pattern_account_grouped = re.compile(r"^(\d+[\.\d]*)( - )(.*$)")
 pattern_split = re.compile(
     r"^([ ]*[1-2][\.[0-9]+]* - .*$)\n\n", flags=re.MULTILINE
 )
