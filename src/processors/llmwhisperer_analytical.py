@@ -75,8 +75,8 @@ def concat_dataframe_cells(df: pd.DataFrame) -> pd.DataFrame:
                 isinstance(df.at[line, column], str)
                 and str(df.at[line, column]).strip() != ""
                 and not isinstance(df.at[line, "Data"], str)
-                # TODO: Handle case where df.at[line, "Data"] is not numeric before calling math.isnan() to avoid TypeError.
-                and math.isnan(df.at[line, "Data"])
+                # Safely check for NaN or missing values in "Data" column.
+                and pd.isna(df.at[line, "Data"])
             ):
                 df.at[line - 1, column] = (
                     str(df.at[line - 1, column]).strip()
