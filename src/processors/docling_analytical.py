@@ -35,7 +35,7 @@ from utils.extract_utils import (
 pattern = re.compile(r"^(\d+\.\d[0-9.]*)( - )(.*$)")
 
 
-def get_current_title(table: DataFrame, row: Series):
+def get_current_title(table: DataFrame, row: Series | DataFrame):
     for _, itRow in table[row.name :: -1].iterrows():
         type_row = itRow["tipoDado"]
         if type_row == ExtracTypeRow.TITLE:
