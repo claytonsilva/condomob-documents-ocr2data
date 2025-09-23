@@ -42,7 +42,7 @@ pytest-socket = '^0.7.0'
 pytest-vcr = '^1.0.2'
 pytest-asyncio = '^1.2.0'
 pydevd = "^3.3.0"
-mypy = "^1.16.0"
+mypy = "^1.18.2"
 types-pyyaml = "^6.0.12.20250516"
 pre-commit = "^4.3.0"
 
