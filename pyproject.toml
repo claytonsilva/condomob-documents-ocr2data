@@ -1,18 +1,14 @@
 [tool.poetry]
-name = "realpark-analysis"
+name = "realpark-documents-ocr2data"
 version = '0.0.0'
-description = 'Repositório de automações do a dia a dia'
+description = 'Parser de documentos de prestações de contas do sistema Condomob'
 authors = ["clayton@cavaleiro.dev"]
 license = "MIT"
 readme = "README.md"
 package-mode = false
-# packages = [
-#     { include = "realpark-analysis" },
-#     { include = "src/**/*.py" },
-# ]
 
 [tool.poetry.dependencies]
-python = '^3.12'
+python = '>=3.13,<3.14'
 typer = "^0.16.1"
 pyyaml = "^6.0.2"
 docling = "^2.40.0"
@@ -28,6 +24,7 @@ pandas-stubs = "^2.3.2.250827"
 pypdf = "^6.1.0"
 transformers = "^4.56.2"
 urllib3 = "^2"
+triton = "^3.4.0"
 
 [tool.poetry.group.dev.dependencies]
 debugpy = "^1.8.14"
