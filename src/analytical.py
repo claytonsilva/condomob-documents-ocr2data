@@ -7,6 +7,7 @@ from google.cloud import bigquery
 from processors.llmwhisperer_analytical import (
     process_txt_file as process_txt_file_llmwhisperer,
 )
+from rp_transformers.analytical import transform_generated_analytical_data
 from services.gcp import (
     clear_data_analytical_from_file,
     upload_csv_to_bigquery,
@@ -14,7 +15,6 @@ from services.gcp import (
 from services.llmwhisperer import (
     process_pdf_file as process_pdf_file_llmwhisperer,
 )
-from transformers.analytical import transform_generated_analytical_data
 from utils.constants import FileType
 from utils.spliter import split_pdf_to_pages
 
