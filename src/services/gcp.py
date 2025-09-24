@@ -24,7 +24,13 @@ def upload_csv_to_bigquery(
     client: bigquery.Client, csv_path: str, dataset_id: str, table_id: str
 ):
     """
-    Faz upload de um arquivo CSV para a tabela 'analytical' no dataset 'realpark', projeto 'realpark-dev' no BigQuery.
+    Faz upload de um arquivo CSV para uma tabela especificada em um dataset e projeto do BigQuery.
+
+    Args:
+        client (bigquery.Client): Cliente BigQuery autenticado.
+        csv_path (str): Caminho para o arquivo CSV a ser enviado.
+        dataset_id (str): ID do dataset de destino.
+        table_id (str): ID da tabela de destino.
     """
     table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
