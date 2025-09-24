@@ -191,7 +191,7 @@ def run(
             if upload and os.path.exists(file_csv_output):
                 print(f"Uploading {file_csv_output} to BigQuery...")
                 upload_csv_to_bigquery(
-                    client, dataset_id, table_id, file_csv_output
+                    client, file_csv_output, dataset_id, table_id
                 )
                 print("Uploaded to BigQuery.")
                 shutil.move(
