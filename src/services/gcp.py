@@ -21,7 +21,7 @@ def clear_data_analytical_from_file(
 
 
 def upload_csv_to_bigquery(
-    client: bigquery.Client, csv_path: str, dataset_id, table_id: str
+    client: bigquery.Client, csv_path: str, dataset_id: str, table_id: str
 ):
     """
     Faz upload de um arquivo CSV para a tabela 'analytical' no dataset 'realpark', projeto 'realpark-dev' no BigQuery.
