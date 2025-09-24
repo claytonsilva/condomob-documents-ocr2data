@@ -37,6 +37,8 @@ def reprocess(
     analytical_units_renamed_list: str,
     upload: bool,
     client: bigquery.Client,
+    dataset_id: str,
+    table_id: str,
 ) -> None:
     files: list[str] = [
         os.path.join(source_dir, file)
@@ -84,10 +86,12 @@ def reprocess(
                 if upload:
                     print(f"Deleting existing data from {page_path}")
                     clear_data_analytical_from_file(
-                        client, os.path.basename(page_path)
+                        client, dataset_id, table_id, os.path.basename(page_path)
                     )
                     print(f"Uploading {page_path} to BigQuery...")
-                    upload_csv_to_bigquery(client, page_path)
+                    upload_csv_to_bigquery(
+                        client, page_path, dataset_id, table_id
+                    )
                     print("Uploaded to BigQuery.")
                 shutil.move(
                     page_path,
@@ -109,6 +113,8 @@ def run(
     analytical_accounts_configuration: str,
     analytical_units_renamed_list: str,
     client: bigquery.Client,
+    dataset_id: str,
+    table_id: str,
 ) -> None:
     os.makedirs(processed_dir, exist_ok=True)
 
@@ -184,7 +190,9 @@ def run(
 
             if upload and os.path.exists(file_csv_output):
                 print(f"Uploading {file_csv_output} to BigQuery...")
-                upload_csv_to_bigquery(client, file_csv_output)
+                upload_csv_to_bigquery(
+                    client, file_csv_output, dataset_id, table_id
+                )
                 print("Uploaded to BigQuery.")
                 shutil.move(
                     file_csv_output,
