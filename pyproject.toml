@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "realpark-documents-ocr2data"
+name = "condomob-documents-ocr2data"
 version = '0.0.0'
 description = 'Parser de documentos de prestações de contas do sistema Condomob'
 authors = ["clayton@cavaleiro.dev"]

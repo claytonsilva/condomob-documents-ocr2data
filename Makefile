@@ -1,4 +1,4 @@
-PROJECT_NAME="realpark-documents-ocr2data"
+PROJECT_NAME="condomob-documents-ocr2data"
 
 # @scf-region env-vars
 export PYTHONDONTWRITEBYTECODE=1

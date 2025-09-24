@@ -38,7 +38,7 @@ def run(
     reprocess: bool = False,
     method: MethodType = MethodType.llmwhisperer,
 ):
-    client = bigquery.Client("realpark-dev")
+    client = bigquery.Client(os.environ["GOOGLE_CLOUD_PROJECT"])
 
     return run_analytical(
         path,
@@ -61,6 +61,8 @@ def run(
         ],
         upload=upload,
         client=client,
+        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
+        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
     )
 
 
@@ -74,9 +76,7 @@ def reprocess(
     file_type: FileType = FileType.TXT,
     upload: bool = False,
 ):
-    client = bigquery.Client(
-        "realpark-dev"
-    )  # TODO create env variable to store project info
+    client = bigquery.Client(os.environ["GOOGLE_CLOUD_PROJECT"])
 
     return reprocess_analytical(
         path,
@@ -96,6 +96,8 @@ def reprocess(
         ],
         upload=upload,
         client=client,
+        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
+        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
     )
 
 

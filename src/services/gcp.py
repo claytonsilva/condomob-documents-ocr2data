@@ -3,10 +3,10 @@ from google.cloud import bigquery
 
 def clear_data_analytical_from_file(
     client: bigquery.Client,
+    dataset_id: str,
+    table_id: str,
     file: str,
 ):
-    dataset_id = "realpark"
-    table_id = "analytical"
     table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
     query = f"""
@@ -20,12 +20,12 @@ def clear_data_analytical_from_file(
     print(results)
 
 
-def upload_csv_to_bigquery(client: bigquery.Client, csv_path: str):
+def upload_csv_to_bigquery(
+    client: bigquery.Client, csv_path: str, dataset_id, table_id: str
+):
     """
     Faz upload de um arquivo CSV para a tabela 'analytical' no dataset 'realpark', projeto 'realpark-dev' no BigQuery.
     """
-    dataset_id = "realpark"
-    table_id = "analytical"
     table_ref = f"{client.project}.{dataset_id}.{table_id}"
 
     job_config = bigquery.LoadJobConfig(
