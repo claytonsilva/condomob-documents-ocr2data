@@ -90,7 +90,7 @@ def reprocess(
                     )
                     print(f"Uploading {page_path} to BigQuery...")
                     upload_csv_to_bigquery(
-                        client, dataset_id, table_id, page_path
+                        client, page_path, dataset_id, table_id
                     )
                     print("Uploaded to BigQuery.")
                 shutil.move(
