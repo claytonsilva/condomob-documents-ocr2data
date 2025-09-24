@@ -86,7 +86,7 @@ def reprocess(
                 if upload:
                     print(f"Deleting existing data from {page_path}")
                     clear_data_analytical_from_file(
-                        client, table_id, table_id, os.path.basename(page_path)
+                        client, dataset_id, table_id, os.path.basename(page_path)
                     )
                     print(f"Uploading {page_path} to BigQuery...")
                     upload_csv_to_bigquery(
