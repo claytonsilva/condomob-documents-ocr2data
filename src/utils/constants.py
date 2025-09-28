@@ -21,7 +21,7 @@ ExtracTypeRow = Enum(
         ("OTHERS", 7),
     ],
 )
-COLLUMNS_ANALYTICAL = Series(
+COLUMNS_ANALYTICAL = Series(
     ["Data", "Descrição", "Participante", "Documento", "Período", "Valor"]
 )
 

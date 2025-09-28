@@ -7,7 +7,7 @@ from io import StringIO
 
 import pandas as pd
 
-from utils.constants import COLLUMNS_ANALYTICAL as COLLUMNS
+from utils.constants import COLUMNS_ANALYTICAL as COLUMNS
 from utils.constants import FileType
 from utils.extract_utils import (
     extract_group_from_contacontabilcompleto,
@@ -202,7 +202,7 @@ def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
         :-1
     ]  # remove last column because is aways empty
     # situações de falha de processamento que necessita de tratamento
-    if columns_from_txt != COLLUMNS.to_list():
+    if columns_from_txt != COLUMNS.to_list():
         # falha de processamento que gera coluna repetida
         if (
             len(
@@ -292,7 +292,7 @@ def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
                 :-1
             ]  # remove last column because is aways empty
     df = df.loc[:, ~df.columns.str.contains("^Unnamed")]
-    df.columns = COLLUMNS
+    df.columns = COLUMNS
     return strip_string_cells(concat_dataframe_cells(df))  # type: ignore
 
 
@@ -300,7 +300,7 @@ def data_processing(data: dict, filename: str) -> pd.DataFrame:
     """
     Processa os dados do dicionário e retorna um DataFrame do pandas.
     """
-    return_data = pd.DataFrame([], columns=COLLUMNS)
+    return_data = pd.DataFrame([], columns=COLUMNS)
     for key, value in data.items():
         if isinstance(value, pd.DataFrame):
             inner_data = value.copy()
