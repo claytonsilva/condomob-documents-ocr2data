@@ -25,7 +25,7 @@ from docling.document_converter import (
 )
 from pandas import DataFrame, Series
 
-from utils.constants import COLLUMNS_ANALYTICAL as COLLUMNS
+from utils.constants import COLUMNS_ANALYTICAL as COLUMNS
 from utils.constants import ExtracTypeRow
 from utils.extract_utils import (
     extract_group_from_contacontabilcompleto,
@@ -48,15 +48,15 @@ def identify_row(line: Series) -> ExtracTypeRow | None:
     Identifies the type of row based on the content of the 'Data' column.
     Returns an instance of ExtracTypeRow enum.
     """
-    first_collumn = line.loc["Data"].strip()
+    first_column = line.loc["Data"].strip()
 
-    if first_collumn == "Data":
+    if first_column == "Data":
         return ExtracTypeRow.HEADERS
-    elif re.match(r"^TOTAL: \d+\.\d+.*", first_collumn):
+    elif re.match(r"^TOTAL: \d+\.\d+.*", first_column):
         return ExtracTypeRow.TOTAL
-    elif re.match(r"^(\d+\.\d[0-9.]*)( - )(.*$)", first_collumn):
+    elif re.match(r"^(\d+\.\d[0-9.]*)( - )(.*$)", first_column):
         return ExtracTypeRow.TITLE
-    elif validate(first_collumn):
+    elif validate(first_column):
         return ExtracTypeRow.ROW
     else:
         return ExtracTypeRow.OTHERS
@@ -103,7 +103,7 @@ def process_pdf_file(input_path: str, output_path: str):
         print(f"## Table {table_ix}")
         # Iremos fazer em cada tabela duas percorridas de loop
         table_output = table_df.copy()
-        table_output.columns = COLLUMNS
+        table_output.columns = COLUMNS
         # inserindo a colunas já com os tipos definidos
         table_output.insert(
             0,
