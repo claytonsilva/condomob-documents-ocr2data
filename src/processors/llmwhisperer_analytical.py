@@ -227,7 +227,7 @@ def from_ascii_table_to_dataframe(table: str) -> pd.DataFrame:
                 for item in df[key].index:
                     if (
                         df.at[item, key] is None
-                        or math.isnan(df.at[item, key])
+                        or pd.isna(df.at[item, key])
                         or df.at[item, key] == ""
                     ):
                         df.at[item, key] = get_first_not_null_value(
