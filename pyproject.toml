@@ -107,7 +107,7 @@ docstring-code-format = true
 docstring-code-line-length = 30
 
 [tool.coverage.run]
-omit = ['tests/**', 'src/**/settings/**', 'src/**/migrations/**']
+omit = ['tests/**', 'src/**/settings/**', 'src/**/migrations/**', '/tmp/**']
 branch = true
 relative_files = true
 
