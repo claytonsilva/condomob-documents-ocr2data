@@ -60,7 +60,12 @@ def transform_generated_analytical_data(
 
     if analytical_accounts_configuration_url:
         accounts_configuration = pandas.read_csv(
-            analytical_accounts_configuration_url, dtype={"ContaContabil": str}
+            analytical_accounts_configuration_url,
+            dtype={
+                "ContaContabil": str,
+                "ContaContabilGrupo": str,
+                "ContaContabilNormalizado": str,
+            },
         )
 
     if analytical_units_renamed_list_url:
