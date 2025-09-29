@@ -71,7 +71,6 @@ def units_renamed_csv(tmp_path):
 def test_transform_with_all_configs(
     sample_csv, accounts_configuration_csv, units_renamed_csv
 ):
-    # Patch pandas in the function's namespace
     # Call the function
     analytical.transform_generated_analytical_data(
         sample_csv,
