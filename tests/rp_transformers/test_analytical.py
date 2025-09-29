@@ -19,7 +19,7 @@ def sample_csv(tmp_path):
         },
     ]
     df = pd.DataFrame(data)
-    csv_path = tmp_path / "page_99_2023-01"
+    csv_path = tmp_path / "page_99_2023-01.csv"
     df.to_csv(csv_path, index=False)
     return str(csv_path)
 
