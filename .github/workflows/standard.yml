@@ -42,10 +42,8 @@ jobs:
           POETRY_VIRTUALENVS_CREATE: false
       - name: Test
         run: make test-coverage
-      # TODO enable lint command
-      # - name: Lint
-      #   run: make lint
-      # only scan test
+      - name: Lint
+        run: make lint
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v6
         env:

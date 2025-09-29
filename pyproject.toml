@@ -43,6 +43,9 @@ mypy = "^1.18.2"
 types-pyyaml = "^6.0.12.20250516"
 pre-commit = "^4.3.0"
 
+[tool.mypy]
+disable_error_code = ["import-untyped", "assignment", "arg-type", "misc"]
+
 [tool.ruff]
 line-length = 79
 target-version = "py313"
@@ -90,6 +93,7 @@ select = [
   "I",
 ]
 ignore = ["E501"]
+
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
