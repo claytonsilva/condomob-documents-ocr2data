@@ -8,7 +8,7 @@
 ## Sobre o projeto
 
 O Aplicativo [Condomob](https://condomob.net/) possui um sistema de
-retaguarda que auxilia síndicose administradoras com toda o rito de
+retaguarda que auxilia síndicos e administradoras com toda o rito de
 cobrança e prestação de contas aos moradores, e no sistema de
 prestação de contas, temos o formato em pdf, no qual para fins de
 análise de desempenho financeiro, recebi a negativa do condomínio
