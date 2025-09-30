@@ -1,0 +1,5 @@
+ContaContabil,ContaContabilDescritivo,ContaContabilGrupo,ContaContabilGrupoDescritivo,Natureza,NaturezaDescritivo,ContaContabilNormalizado,CompoeTaxa,AcordadoAssembleia
+1.01,"Taxa/Rateio de Despesas Ordinárias (Segurança, Manutenção, etc)",1.1,"Taxa/Rateio de Despesas Ordinárias (Segurança, Manutenção, etc)",1,Receita,1.1,TRUE,TRUE
+1.02,Juros (recebidos),1.2,Juros (recebidos),1,Receita,1.2,TRUE,TRUE
+1.03,Multas (recebidas),1.3,Multas (recebidas),1,Receita,1.3,TRUE,TRUE
+2.1.01,Salários Funcionários,2.1,Despesas com Pessoal,2,Despesa,2.1.01,TRUE,TRUE
