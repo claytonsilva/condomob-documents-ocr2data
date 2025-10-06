@@ -446,14 +446,14 @@ files = [
 
 [[package]]
 name = "docling"
-version = "2.54.0"
+version = "2.55.1"
 description = "SDK and CLI for parsing PDF, DOCX, HTML, and more, to a unified document representation for powering downstream workflows such as gen AI applications."
 optional = false
 python-versions = "<4.0,>=3.9"
 groups = ["main"]
 files = [
-    {file = "docling-2.54.0-py3-none-any.whl", hash = "sha256:3d1248811f3d1de7fb05ba4f3704e904ca46880aca0d201fd55150b430968b81"},
-    {file = "docling-2.54.0.tar.gz", hash = "sha256:27326d50c33da47d89edc21a7d342af2c5235b66f780a07236196d6e1d1dd357"},
+    {file = "docling-2.55.1-py3-none-any.whl", hash = "sha256:895aba282c6cca9ca1f6b9ff57c2002e4f581f722c608aa671d68382d4d61e07"},
+    {file = "docling-2.55.1.tar.gz", hash = "sha256:e60a5612b2b993efd8a0b5464aff1b9868e3cab5c2e239c863709e6b780f3c57"},
 ]
 
 [package.dependencies]
@@ -483,7 +483,7 @@ requests = ">=2.32.2,<3.0.0"
 rtree = ">=1.3.0,<2.0.0"
 scipy = ">=1.6.0,<2.0.0"
 tqdm = ">=4.65.0,<5.0.0"
-typer = ">=0.12.5,<0.17.0"
+typer = ">=0.12.5,<0.20.0"
 
 [package.extras]
 asr = ["openai-whisper (>=20250625)"]
@@ -3609,6 +3609,13 @@ optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
+    {file = "PyYAML-6.0.3-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:c2514fceb77bc5e7a2f7adfaa1feb2fb311607c9cb518dbc378688ec73d8292f"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9c57bb8c96f6d1808c030b1687b9b5fb476abaa47f0db9c0101f5e9f394e97f4"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:efd7b85f94a6f21e4932043973a7ba2613b059c4a000551892ac9f1d11f5baf3"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:22ba7cfcad58ef3ecddc7ed1db3409af68d023b7f940da23c6c2a1890976eda6"},
+    {file = "PyYAML-6.0.3-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:6344df0d5755a2c9a276d4473ae6b90647e216ab4757f8426893b5dd2ac3f369"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win32.whl", hash = "sha256:3ff07ec89bae51176c0549bc4c63aa6202991da2d9a6129d7aef7f1407d3f295"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win_amd64.whl", hash = "sha256:5cf4e27da7e3fbed4d6c3d8e797387aaad68102272f8f9752883bc32d61cb87b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_10_13_x86_64.whl", hash = "sha256:214ed4befebe12df36bcc8bc2b64b396ca31be9304b8f59e25c11cf94a4c033b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:02ea2dfa234451bbb8772601d7b8e426c2bfa197136796224e50e35a78777956"},
     {file = "pyyaml-6.0.3-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b30236e45cf30d2b8e7b3e85881719e98507abed1011bf463a8fa23e9c3e98a8"},
@@ -5163,4 +5170,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "14ac7a054627dfc1bad9dc170cf9f0dd7e3f4df51f324b60daced8c1e7655f17"
+content-hash = "152ce25f6397b6b731c301c54dfea78a0a1bb34a854b190d588be83dc98b38f8"
