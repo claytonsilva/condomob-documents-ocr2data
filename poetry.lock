@@ -3609,6 +3609,13 @@ optional = false
 python-versions = ">=3.8"
 groups = ["main", "dev"]
 files = [
+    {file = "PyYAML-6.0.3-cp38-cp38-macosx_10_13_x86_64.whl", hash = "sha256:c2514fceb77bc5e7a2f7adfaa1feb2fb311607c9cb518dbc378688ec73d8292f"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:9c57bb8c96f6d1808c030b1687b9b5fb476abaa47f0db9c0101f5e9f394e97f4"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_s390x.manylinux_2_17_s390x.manylinux_2_28_s390x.whl", hash = "sha256:efd7b85f94a6f21e4932043973a7ba2613b059c4a000551892ac9f1d11f5baf3"},
+    {file = "PyYAML-6.0.3-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:22ba7cfcad58ef3ecddc7ed1db3409af68d023b7f940da23c6c2a1890976eda6"},
+    {file = "PyYAML-6.0.3-cp38-cp38-musllinux_1_2_x86_64.whl", hash = "sha256:6344df0d5755a2c9a276d4473ae6b90647e216ab4757f8426893b5dd2ac3f369"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win32.whl", hash = "sha256:3ff07ec89bae51176c0549bc4c63aa6202991da2d9a6129d7aef7f1407d3f295"},
+    {file = "PyYAML-6.0.3-cp38-cp38-win_amd64.whl", hash = "sha256:5cf4e27da7e3fbed4d6c3d8e797387aaad68102272f8f9752883bc32d61cb87b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_10_13_x86_64.whl", hash = "sha256:214ed4befebe12df36bcc8bc2b64b396ca31be9304b8f59e25c11cf94a4c033b"},
     {file = "pyyaml-6.0.3-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:02ea2dfa234451bbb8772601d7b8e426c2bfa197136796224e50e35a78777956"},
     {file = "pyyaml-6.0.3-cp310-cp310-manylinux2014_aarch64.manylinux_2_17_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b30236e45cf30d2b8e7b3e85881719e98507abed1011bf463a8fa23e9c3e98a8"},
@@ -4460,38 +4467,48 @@ widechars = ["wcwidth"]
 
 [[package]]
 name = "tesserocr"
-version = "2.8.0"
+version = "2.9.1"
 description = "A simple, Pillow-friendly, Python wrapper around tesseract-ocr API using Cython"
 optional = false
-python-versions = "*"
+python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "tesserocr-2.8.0-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:b5d5dcabe688bf7bb76f87eef05783aa1d305c9566b7f6f6735a12f224ca379b"},
-    {file = "tesserocr-2.8.0-cp310-cp310-macosx_15_0_arm64.whl", hash = "sha256:55d0e018d34054fa7f875cd126abaf423de4069fde49d638a399de530949055b"},
-    {file = "tesserocr-2.8.0-cp310-cp310-manylinux_2_28_aarch64.whl", hash = "sha256:ad52bb2b1d48b7db6fed379a6805c2437432374fab98b0ab5071ff3fc81efaf2"},
-    {file = "tesserocr-2.8.0-cp310-cp310-manylinux_2_28_x86_64.whl", hash = "sha256:4ac659c3207fd3c0e43081a51e486e3d42259abd20bbaed6cd2ee4cd332a78c0"},
-    {file = "tesserocr-2.8.0-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:c47c69177e948f567f818dec308717a679bdd3941fd5d3fc6cd9ecf93fe165a4"},
-    {file = "tesserocr-2.8.0-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:88876546ddadc9590800df5dec7f2acbd35a423f0803ca2f17a93567aabbd877"},
-    {file = "tesserocr-2.8.0-cp311-cp311-macosx_15_0_arm64.whl", hash = "sha256:09d8c55838a0085662d2a07a40843a6bbbd6baf44b45eda01df307cdac17089c"},
-    {file = "tesserocr-2.8.0-cp311-cp311-manylinux_2_28_aarch64.whl", hash = "sha256:e89b4928eefcea953ad70ed03fb344568d1a574347d1f0d18699d01a020a7c7e"},
-    {file = "tesserocr-2.8.0-cp311-cp311-manylinux_2_28_x86_64.whl", hash = "sha256:4636a86269e97d60731a1edd16d29cb2c79a28cc91594d7f0af31ee65f72f4ae"},
-    {file = "tesserocr-2.8.0-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:9dbe02605da205ce253524c4ca681a519a55258906ff8ca585f9df7bb1e78616"},
-    {file = "tesserocr-2.8.0-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:7a0b03d46a0ad2265b83f461ca305a6e5aaac2626853a82012c6198bb4105d66"},
-    {file = "tesserocr-2.8.0-cp312-cp312-macosx_15_0_arm64.whl", hash = "sha256:c9acde3d66d6ef40f95e4cef424b24acbf90e278396827fc064915c665c6548d"},
-    {file = "tesserocr-2.8.0-cp312-cp312-manylinux_2_28_aarch64.whl", hash = "sha256:426dfff81bae757faa25477feaf783f6f5bcdb94ae6a95f4fe24eda97f4825c0"},
-    {file = "tesserocr-2.8.0-cp312-cp312-manylinux_2_28_x86_64.whl", hash = "sha256:7cb74e1ce1bc038a5cc6db90e5a79cb55d6db1b7e6fe7a0d9eb30475fdfd9036"},
-    {file = "tesserocr-2.8.0-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:9ad1a2900424994ca5caa2470be04bd1c6ee3f0674b0050a34b556f6ba7d2ed5"},
-    {file = "tesserocr-2.8.0-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:44b3396d52379155fd838931b78b044129c7c77a8f02a92574cde626cff9b4a8"},
-    {file = "tesserocr-2.8.0-cp313-cp313-macosx_15_0_arm64.whl", hash = "sha256:1edd2302f4a91b5491a4ce3f63e612441adf92fd81b339b85cbedb3b5b40f206"},
-    {file = "tesserocr-2.8.0-cp313-cp313-manylinux_2_28_aarch64.whl", hash = "sha256:b0dd849ce77373f9ac4b54d345b4d7115414e525e57a158e948887d744c6f909"},
-    {file = "tesserocr-2.8.0-cp313-cp313-manylinux_2_28_x86_64.whl", hash = "sha256:9ce710a73308964f2ac53f94b4980d2791bb67a82863bb7ef0ca445c1b325aa4"},
-    {file = "tesserocr-2.8.0-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:a7a36af39aaf29a152c629cf62457192944f8854fbdd28395ef92d283e800662"},
-    {file = "tesserocr-2.8.0-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:f83344e350062d7db8625aa21695d34949a25e1f144788996a0e1e91dc53ca45"},
-    {file = "tesserocr-2.8.0-cp39-cp39-macosx_15_0_arm64.whl", hash = "sha256:10fa0125d57c9edc93a7f35673f6b977e0fc0deb123d62b158c93fd8ca4c1c2c"},
-    {file = "tesserocr-2.8.0-cp39-cp39-manylinux_2_28_aarch64.whl", hash = "sha256:efef77ed8702d56a3dc7ba5dba37ce13beecd24128042ad41cbc20c50bb5e23e"},
-    {file = "tesserocr-2.8.0-cp39-cp39-manylinux_2_28_x86_64.whl", hash = "sha256:b41a78eaa35c90d61facd07dca96443e7dc1f0604ae955843be916e2f9a225af"},
-    {file = "tesserocr-2.8.0-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:317931096378a1dd056500d9c3a489aa0e4546e4d7792a6ffa1a31c0902ab365"},
-    {file = "tesserocr-2.8.0.tar.gz", hash = "sha256:be518d1b1b5ff54c11aada1e0fd12942509ea70581e0a8b39a2a473a0b2dbd36"},
+    {file = "tesserocr-2.9.1-cp310-cp310-macosx_13_0_x86_64.whl", hash = "sha256:a39295b23ab33adf5d55335f9784ed6def0018bd7012973d1296175d0edebfcd"},
+    {file = "tesserocr-2.9.1-cp310-cp310-macosx_15_0_arm64.whl", hash = "sha256:289be456c3b474f1b4dfa3fef33482c6d28fb6077859b3359eaf0907ff7d8ed3"},
+    {file = "tesserocr-2.9.1-cp310-cp310-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:dd094d402cdccdb7c63268a3fc7cf695d97c1e068e470c54d1f40f53f8490326"},
+    {file = "tesserocr-2.9.1-cp310-cp310-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:94e1676ae881db7f9af47a3ab826bbaa4644932efc3098852a56d99f6c2c89a4"},
+    {file = "tesserocr-2.9.1-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:090f344a3ccdab49c13334b0b68197706cf3ece6e6e5b5d3852f299b33256ba7"},
+    {file = "tesserocr-2.9.1-cp311-cp311-macosx_13_0_x86_64.whl", hash = "sha256:210dbab208c9e6a362add70241ac2e8f969356c37cb0d0f1e98ca916848e6116"},
+    {file = "tesserocr-2.9.1-cp311-cp311-macosx_15_0_arm64.whl", hash = "sha256:c071927618edd917db353713fb14e3d9a9e22c8cd1ad4aeb6616a605e0e917b6"},
+    {file = "tesserocr-2.9.1-cp311-cp311-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:c347b687c997cdb6d9dadaa32ea1d4cefea3e2dca3d04595fd0f23e95d35d8d4"},
+    {file = "tesserocr-2.9.1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:dca9f3ddf18f51b9400c1023bad8b4d4a169e4988bac847652c6f2354ad579c2"},
+    {file = "tesserocr-2.9.1-cp311-cp311-musllinux_1_2_x86_64.whl", hash = "sha256:598e3b44bf201e125064f31c0705160e0527af248ef831fb8e5953d10bcf914b"},
+    {file = "tesserocr-2.9.1-cp312-cp312-macosx_13_0_x86_64.whl", hash = "sha256:b8eca932ee4142b9326f28abf173f21bc0225935fedc48ddebdd82694f3f2445"},
+    {file = "tesserocr-2.9.1-cp312-cp312-macosx_15_0_arm64.whl", hash = "sha256:6abf55e5eefe8d0f6ec69574ca71cedfaf640e65c3e7e296672a1edac034296e"},
+    {file = "tesserocr-2.9.1-cp312-cp312-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:852494328474570378866a7f5f8bb2ec659e5c86e8dc5c605218a5f3a58975a4"},
+    {file = "tesserocr-2.9.1-cp312-cp312-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:7cb3e246391fccbfe7922a4701a83a9a34ef0ccec3e6aa35dfb986c0f682a867"},
+    {file = "tesserocr-2.9.1-cp312-cp312-musllinux_1_2_x86_64.whl", hash = "sha256:95d3ef17e153b0ea679764c27919e03ece8cea58f995e0f0f499c2a36390fb66"},
+    {file = "tesserocr-2.9.1-cp313-cp313-macosx_13_0_x86_64.whl", hash = "sha256:eee43f32026d2f235b4d407a812e1f75fc907be0ee717f4d119086f70b9be48d"},
+    {file = "tesserocr-2.9.1-cp313-cp313-macosx_15_0_arm64.whl", hash = "sha256:0d9f658f4d5cd0b6585d22dc662b949e434deca3052e9ba8bfa4f56cd1581a24"},
+    {file = "tesserocr-2.9.1-cp313-cp313-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:4a5f497fbdd90e3d682f804e9d6b3ca7b401e2677431504cfee140f4830ec94f"},
+    {file = "tesserocr-2.9.1-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:53bb6fcba51c65fd7da033fabf5119ce3832a888645a86f4ac2e2b8eadeee18f"},
+    {file = "tesserocr-2.9.1-cp313-cp313-musllinux_1_2_x86_64.whl", hash = "sha256:01b0fa0fb9ebf2a2a12de55fe2ca5cd8ea0167d9723378b8eb164387170dedbb"},
+    {file = "tesserocr-2.9.1-cp314-cp314-macosx_13_0_x86_64.whl", hash = "sha256:9f5d28e75a232fbcf620d5cd25cb25440ec2de94f07e478c77ab0f39e3c74522"},
+    {file = "tesserocr-2.9.1-cp314-cp314-macosx_15_0_arm64.whl", hash = "sha256:52ef94511817a16c510a890ab5fceaa44f71c8c21e83d75194197e5224fd4248"},
+    {file = "tesserocr-2.9.1-cp314-cp314-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:b7e0596b56d36c4c778bfd9bf91e0b6ae7e338726476fa62af123d5952f1d2bc"},
+    {file = "tesserocr-2.9.1-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:a9ceba9ab9d352ecec92bdf86d6659c1fb7e590b41f57d8cf6944c0109254678"},
+    {file = "tesserocr-2.9.1-cp314-cp314-musllinux_1_2_x86_64.whl", hash = "sha256:a7741f442a3145df9ea9de58c989619cae859dc20ba8e02abf264b8415efdad4"},
+    {file = "tesserocr-2.9.1-cp314-cp314t-macosx_13_0_x86_64.whl", hash = "sha256:cbcef24e3705337b2a4fecf9b030c3e42effe6a470d649db89a93839045a06c3"},
+    {file = "tesserocr-2.9.1-cp314-cp314t-macosx_15_0_arm64.whl", hash = "sha256:ed05641f28169ba888745d11e9a22eee7c00b246dec3b4d37aef04781cafeae9"},
+    {file = "tesserocr-2.9.1-cp314-cp314t-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:73854226b90a117790f538c179c9ec8a03733dc0fb156c93fad92910454a590b"},
+    {file = "tesserocr-2.9.1-cp314-cp314t-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:180a474871850671dfbe39d98a4dc063b2faebeea23fa3545b2448c39abe02bf"},
+    {file = "tesserocr-2.9.1-cp314-cp314t-musllinux_1_2_x86_64.whl", hash = "sha256:53b2169ab3904bd094418129ba823660dc512f5dd5eb707e4d8d3831f4b33aff"},
+    {file = "tesserocr-2.9.1-cp39-cp39-macosx_13_0_x86_64.whl", hash = "sha256:b1ffbe6e161e146fcbac99eb668861a98166266ae03645edb24641d06ff04b09"},
+    {file = "tesserocr-2.9.1-cp39-cp39-macosx_15_0_arm64.whl", hash = "sha256:34cc41e29534fb2cf8eaecbc0d8034a81a6a4655bc516ed1ed163161f4790bd4"},
+    {file = "tesserocr-2.9.1-cp39-cp39-manylinux_2_27_aarch64.manylinux_2_28_aarch64.whl", hash = "sha256:364494dc4a3cd39a2b134d12e6f516fd584c18f655378ff36acb9c259da72772"},
+    {file = "tesserocr-2.9.1-cp39-cp39-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:0ce287aa5ddf6a8ff55c485221a3b7249cf527250095875acbe9da94af5de0b2"},
+    {file = "tesserocr-2.9.1-cp39-cp39-musllinux_1_2_x86_64.whl", hash = "sha256:c02430a9c5cb4c05d82e1ef4843473f423b05308aa2ecb78d607b3d4172216cc"},
+    {file = "tesserocr-2.9.1.tar.gz", hash = "sha256:cb809fde3421b347958f725afe70b341a02149078c7f02e4cffa80121d161219"},
 ]
 
 [[package]]
@@ -5163,4 +5180,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "14ac7a054627dfc1bad9dc170cf9f0dd7e3f4df51f324b60daced8c1e7655f17"
+content-hash = "0ce2ec6310ec4adf80036ac9ecb0c9c56937dc63829e88c926a359946629f019"
