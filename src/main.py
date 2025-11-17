@@ -16,13 +16,16 @@ from services.llmwhisperer import (
     process_pdf_file as process_pdf_file_llmwhisperer,
 )
 from utils.constants import FileType, MethodType
+from utils.merger import merge_document
 from utils.spliter import split_pdf_to_pages
 
 app = typer.Typer()
 analytical_app = typer.Typer()
 spliter_app = typer.Typer()
+merger_app = typer.Typer()
 app.add_typer(analytical_app, name="analytical", help="Analytical commands")
 app.add_typer(spliter_app, name="spliter", help="Splitting commands")
+app.add_typer(merger_app, name="merger", help="Merge commands")
 
 
 @analytical_app.command(
@@ -109,6 +112,16 @@ def run_split(
     end: int | None = None,
 ):
     split_pdf_to_pages(path, output_dir, start, end)
+
+
+@merger_app.command(
+    name="run", help="Merge a Folder with csv's files in a single csv"
+)
+def run_merger(
+    path_dir: str = os.path.join(os.getcwd(), "output"),
+    output: str = os.path.join(os.getcwd(), "processed", "merged.csv"),
+):
+    merge_document(path_dir, output)
 
 
 if __name__ == "__main__":
