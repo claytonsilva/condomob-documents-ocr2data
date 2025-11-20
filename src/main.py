@@ -4,8 +4,8 @@ import typer
 from dotenv import load_dotenv
 from google.cloud import bigquery
 
-from analytical import reprocess as reprocess_analytical
-from analytical import run as run_analytical
+from analytical import reprocess as reprocess_analytical_import
+from analytical import run as run_analytical_import
 from processors.docling_analytical import (
     process_pdf_file as process_pdf_file_docling,
 )
@@ -17,8 +17,9 @@ from services.llmwhisperer import (
 )
 from utils.constants import FileType, MethodType
 from utils.merger import merge_document
-from utils.spliter import split_pdf_to_pages
+from utils.spliter import split_pdf_to_pages as split_pdf_import
 
+# Create Typer apps
 app = typer.Typer()
 analytical_app = typer.Typer()
 spliter_app = typer.Typer()
@@ -28,22 +29,20 @@ app.add_typer(spliter_app, name="spliter", help="Splitting commands")
 app.add_typer(merger_app, name="merger", help="Merge commands")
 
 
-@analytical_app.command(
-    help="Run the analytical extraction process on a PDF file with a different approach"
-)
-def run(
+def run_analytical_function(
     path: str,
-    output_dir: str = os.path.join(os.getcwd(), "output"),
+    output_dir: str,
+    dataset_id: str,
+    table_id: str,
+    client: bigquery.Client,
     start: int = 1,
     end: int | None = None,
-    upload: bool = False,
-    processed_dir: str = os.path.join(os.getcwd(), "processed"),
     reprocess: bool = False,
+    processed_dir: str = "",
+    upload: bool = False,
     method: MethodType = MethodType.llmwhisperer,
 ):
-    client = bigquery.Client(os.environ["GOOGLE_CLOUD_PROJECT"])
-
-    return run_analytical(
+    return run_analytical_import(
         path,
         output_dir,
         start,
@@ -64,24 +63,22 @@ def run(
         ],
         upload=upload,
         client=client,
-        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
-        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
+        dataset_id=dataset_id,
+        table_id=table_id,
     )
 
 
-@analytical_app.command(
-    help="Run the analytical extraction process on a PDF file with a different approach"
-)
-def reprocess(
+def reprocess_analytical_function(
     path: str,
-    output_dir: str = os.path.join(os.getcwd(), "output"),
+    output_dir: str,
+    dataset_id: str,
+    table_id: str,
+    client: bigquery.Client,
     method: MethodType = MethodType.llmwhisperer,
     file_type: FileType = FileType.TXT,
     upload: bool = False,
 ):
-    client = bigquery.Client(os.environ["GOOGLE_CLOUD_PROJECT"])
-
-    return reprocess_analytical(
+    return reprocess_analytical_import(
         path,
         output_dir,
         process_pdf_file_fn=process_pdf_file_llmwhisperer
@@ -99,8 +96,69 @@ def reprocess(
         ],
         upload=upload,
         client=client,
-        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
-        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
+        dataset_id=dataset_id,
+        table_id=table_id,
+    )
+
+
+def split_pdf_function(
+    path: str,
+    output_dir: str = "output",
+    start: int = 1,
+    end: int | None = None,
+):
+    """Function to split PDF pages (converted from class-based)."""
+    return split_pdf_import(path, output_dir, start, end)
+
+
+# Typer command decorators that call the functions
+@analytical_app.command(
+    help="Run the analytical extraction process on a PDF file with a different approach"
+)
+def run(
+    path: str,
+    output_dir: str = os.path.join(os.getcwd(), "output"),
+    start: int = 1,
+    end: int | None = None,
+    upload: bool = False,
+    processed_dir: str = os.path.join(os.getcwd(), "processed"),
+    reprocess: bool = False,
+    method: MethodType = MethodType.llmwhisperer,
+):
+    return run_analytical_function(
+        path=path,
+        output_dir=output_dir,
+        start=start,
+        end=end,
+        reprocess=reprocess,
+        processed_dir=processed_dir,
+        upload=upload,
+        method=method,
+        dataset_id=os.environ["BIGQUERY_DATASET_ID"],
+        table_id=os.environ["BIGQUERY_TABLE_ID"],
+        client=bigquery.Client(),
+    )
+
+
+@analytical_app.command(
+    help="Run the analytical extraction process on a PDF file with a different approach"
+)
+def reprocess(
+    path: str,
+    output_dir: str = os.path.join(os.getcwd(), "output"),
+    method: MethodType = MethodType.llmwhisperer,
+    file_type: FileType = FileType.TXT,
+    upload: bool = False,
+):
+    return reprocess_analytical_function(
+        path=path,
+        output_dir=output_dir,
+        method=method,
+        file_type=file_type,
+        upload=upload,
+        dataset_id=os.environ["BIGQUERY_DATASET_ID"],
+        table_id=os.environ["BIGQUERY_TABLE_ID"],
+        client=bigquery.Client(),
     )
 
 
@@ -111,7 +169,12 @@ def run_split(
     start: int = 1,
     end: int | None = None,
 ):
-    split_pdf_to_pages(path, output_dir, start, end)
+    return split_pdf_function(
+        path=path,
+        output_dir=output_dir,
+        start=start,
+        end=end,
+    )
 
 
 @merger_app.command(
