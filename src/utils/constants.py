@@ -11,7 +11,7 @@ FileType = Enum(
     ],
 )
 
-ExtracTypeRow = Enum(
+ExtractTypeRow = Enum(
     "EXTRACTED_TYPE_ROW",
     [
         ("TOTAL", 1),

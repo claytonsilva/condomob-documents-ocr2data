@@ -4,7 +4,7 @@ from processors.docling_analytical import (
     get_current_title,
     identify_row,
 )
-from utils.constants import ExtracTypeRow
+from utils.constants import ExtractTypeRow
 
 # Teste quando a própria linha é um título
 
@@ -12,9 +12,9 @@ from utils.constants import ExtracTypeRow
 def test_get_current_title_linha_titulo():
     data = {
         "tipoDado": [
-            ExtracTypeRow.OTHERS,
-            ExtracTypeRow.TITLE,
-            ExtracTypeRow.OTHERS,
+            ExtractTypeRow.OTHERS,
+            ExtractTypeRow.TITLE,
+            ExtractTypeRow.OTHERS,
         ],
         "Data": ["data0", "data1", "data2"],
     }
@@ -30,9 +30,9 @@ def test_get_current_title_linha_titulo():
 def test_get_current_title_titulo_anterior():
     data = {
         "tipoDado": [
-            ExtracTypeRow.TITLE,
-            ExtracTypeRow.OTHERS,
-            ExtracTypeRow.OTHERS,
+            ExtractTypeRow.TITLE,
+            ExtractTypeRow.OTHERS,
+            ExtractTypeRow.OTHERS,
         ],
         "Data": ["first_title", "data1", "data2"],
     }
@@ -49,9 +49,9 @@ def test_get_current_title_titulo_anterior():
 def test_get_current_title_sem_titulo():
     data = {
         "tipoDado": [
-            ExtracTypeRow.OTHERS,
-            ExtracTypeRow.OTHERS,
-            ExtracTypeRow.OTHERS,
+            ExtractTypeRow.OTHERS,
+            ExtractTypeRow.OTHERS,
+            ExtractTypeRow.OTHERS,
         ],
         "Data": ["data0", "data1", "data2"],
     }
@@ -67,10 +67,10 @@ def test_get_current_title_sem_titulo():
 def test_get_current_title_multiplos_titulos():
     data = {
         "tipoDado": [
-            ExtracTypeRow.TITLE,
-            ExtracTypeRow.TITLE,
-            ExtracTypeRow.OTHERS,
-            ExtracTypeRow.TITLE,
+            ExtractTypeRow.TITLE,
+            ExtractTypeRow.TITLE,
+            ExtractTypeRow.OTHERS,
+            ExtractTypeRow.TITLE,
         ],
         "Data": ["first", "second", "data", "third"],
     }
@@ -96,7 +96,7 @@ def test_identify_row_others_primeiro_grupo():
             "Valor": "Valor não vazio",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.OTHERS
+    assert identify_row(line) == ExtractTypeRow.OTHERS
 
 
 # Teste 2.1: Coluna "Data" não vazia, as demais vazias, e valor da "Data" corresponde ao padrão TOTAL → TOTAL
@@ -111,7 +111,7 @@ def test_identify_row_total():
             "Valor": "   ",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.TOTAL
+    assert identify_row(line) == ExtractTypeRow.TOTAL
 
 
 # Teste 2.2: Coluna "Data" não vazia, as demais vazias, e valor da "Data" corresponde ao padrão TITLE → TITLE
@@ -126,7 +126,7 @@ def test_identify_row_title():
             "Valor": "   ",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.TITLE
+    assert identify_row(line) == ExtractTypeRow.TITLE
 
 
 # Teste 2.3: Coluna "Data" não vazia, as demais vazias, mas "Data" não bate com TOTAL nem TITLE → OTHERS
@@ -141,7 +141,7 @@ def test_identify_row_others_segundo_grupo():
             "Valor": "   ",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.OTHERS
+    assert identify_row(line) == ExtractTypeRow.OTHERS
 
 
 # Teste 3.1: Caso especial no else: "Data" não vazia, mas não preenche a condição do grupo 2, e "Data" é exatamente "Data" → HEADERS
@@ -156,7 +156,7 @@ def test_identify_row_headers():
             "Valor": "   ",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.HEADERS
+    assert identify_row(line) == ExtractTypeRow.HEADERS
 
 
 # Teste 3.2: Caso no else: "Data" não vazia, não se enquadra nos demais padrões e não é "Data" → ROW
@@ -171,4 +171,4 @@ def test_identify_row_row():
             "Valor": "Conteúdo",
         }
     )
-    assert identify_row(line) == ExtracTypeRow.ROW
+    assert identify_row(line) == ExtractTypeRow.ROW

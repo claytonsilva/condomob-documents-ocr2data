@@ -26,7 +26,7 @@ from docling.document_converter import (
 from pandas import DataFrame, Series
 
 from utils.constants import COLUMNS_ANALYTICAL as COLUMNS
-from utils.constants import ExtracTypeRow
+from utils.constants import ExtractTypeRow
 from utils.extract_utils import (
     extract_group_from_contacontabilcompleto,
     validate,
@@ -38,28 +38,28 @@ pattern = re.compile(r"^(\d+\.\d[0-9.]*)( - )(.*$)")
 def get_current_title(table: DataFrame, row: Series | DataFrame):
     for _, itRow in table[row.name :: -1].iterrows():
         type_row = itRow["tipoDado"]
-        if type_row == ExtracTypeRow.TITLE:
+        if type_row == ExtractTypeRow.TITLE:
             return itRow["Data"]
     return None
 
 
-def identify_row(line: Series) -> ExtracTypeRow | None:
+def identify_row(line: Series) -> ExtractTypeRow | None:
     """
     Identifies the type of row based on the content of the 'Data' column.
-    Returns an instance of ExtracTypeRow enum.
+    Returns an instance of ExtractTypeRow enum.
     """
     first_column = line.loc["Data"].strip()
 
     if first_column == "Data":
-        return ExtracTypeRow.HEADERS
+        return ExtractTypeRow.HEADERS
     elif re.match(r"^TOTAL: \d+\.\d+.*", first_column):
-        return ExtracTypeRow.TOTAL
+        return ExtractTypeRow.TOTAL
     elif re.match(r"^(\d+\.\d[0-9.]*)( - )(.*$)", first_column):
-        return ExtracTypeRow.TITLE
+        return ExtractTypeRow.TITLE
     elif validate(first_column):
-        return ExtracTypeRow.ROW
+        return ExtractTypeRow.ROW
     else:
-        return ExtracTypeRow.OTHERS
+        return ExtractTypeRow.OTHERS
 
 
 def process_pdf_file(input_path: str, output_path: str):
@@ -120,7 +120,7 @@ def process_pdf_file(input_path: str, output_path: str):
         )
         # remover dados que não serão mais usados
         table_output.drop(
-            table_output[table_output["tipoDado"] != ExtracTypeRow.ROW].index,  # pyright: ignore
+            table_output[table_output["tipoDado"] != ExtractTypeRow.ROW].index,  # pyright: ignore
             inplace=True,
         )  # pyright: ignore
         # no final insere as colunas sumárias da tabela
