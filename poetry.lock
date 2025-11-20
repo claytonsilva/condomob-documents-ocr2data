@@ -2417,25 +2417,26 @@ xml = ["lxml (>=4.9.2)"]
 
 [[package]]
 name = "pandas-gbq"
-version = "0.29.2"
+version = "0.31.0"
 description = "Google BigQuery connector for pandas"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pandas_gbq-0.29.2-py3-none-any.whl", hash = "sha256:99f6b642bd8340e96c2acdf7d717108aa0d31c703c2f284817ba7dc3b16110b2"},
-    {file = "pandas_gbq-0.29.2.tar.gz", hash = "sha256:a3a28e7de4f8456fc4b8e9b7472b9bc470d2566f89c4cd997599e504f5a0a706"},
+    {file = "pandas_gbq-0.31.0-py3-none-any.whl", hash = "sha256:cb7aa43bba052631aed66d4464820657aa037b203e9ee1a413437171ab9ab867"},
+    {file = "pandas_gbq-0.31.0.tar.gz", hash = "sha256:0a999cfb06c83efa54d36731dda5748d83daef1445cb23ec03d137d23af7fd5c"},
 ]
 
 [package.dependencies]
 db-dtypes = ">=1.0.4,<2.0.0"
-google-api-core = ">=2.10.2,<3.0.0"
-google-auth = ">=2.13.0"
+google-api-core = ">=2.15.0,<3.0.0"
+google-auth = ">=2.14.1"
 google-auth-oauthlib = ">=0.7.0"
-google-cloud-bigquery = ">=3.4.2,<4.0.0"
+google-cloud-bigquery = ">=3.20.0,<4.0.0"
 numpy = ">=1.18.1"
 packaging = ">=22.0.0"
 pandas = ">=1.1.4"
+psutil = ">=5.9.8"
 pyarrow = ">=4.0.0"
 pydata-google-auth = ">=1.5.0"
 setuptools = "*"
@@ -5435,4 +5436,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "4ade5797873132ca50fb0b464b9497f7c79e211ba7d8c39cf7a7ce5403982ade"
+content-hash = "ae520034d3df40aa9ae95b7f0dd93103015f27b2da12a408f7228cf22ece6e8a"
