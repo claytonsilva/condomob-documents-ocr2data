@@ -40,9 +40,6 @@ def mock_env_vars():
             "GOOGLE_SHEET_RENAMED_UNITS_ANALYTICAL_URL": "test-units-url",
             "GOOGLE_CLOUD_BIGQUERY_DATASET_ID": "test-dataset",
             "GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL": "test-table",
-            # Also add the shorter names used by src modules
-            "BIGQUERY_DATASET_ID": "test-dataset",
-            "BIGQUERY_TABLE_ID": "test-table",
         },
     ):
         yield
@@ -405,9 +402,6 @@ def mock_all_dependencies():
                 "GOOGLE_SHEET_RENAMED_UNITS_ANALYTICAL_URL": "test-units-url",
                 "GOOGLE_CLOUD_BIGQUERY_DATASET_ID": "test-dataset",
                 "GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL": "test-table",
-                # Also add the shorter names used by src modules
-                "BIGQUERY_DATASET_ID": "test-dataset",
-                "BIGQUERY_TABLE_ID": "test-table",
             },
         ),
         patch("main.bigquery.Client"),

@@ -147,8 +147,8 @@ def run(
         processed_dir=processed_dir,
         upload=upload,
         method=method,
-        dataset_id=os.environ["BIGQUERY_DATASET_ID"],
-        table_id=os.environ["BIGQUERY_TABLE_ID"],
+        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
+        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
         client=bigquery.Client(),
     )
 
@@ -169,8 +169,8 @@ def reprocess(
         method=method,
         file_type=file_type,
         upload=upload,
-        dataset_id=os.environ["BIGQUERY_DATASET_ID"],
-        table_id=os.environ["BIGQUERY_TABLE_ID"],
+        dataset_id=os.environ["GOOGLE_CLOUD_BIGQUERY_DATASET_ID"],
+        table_id=os.environ["GOOGLE_CLOUD_BIGQUERY_TABLE_ID_ANALYTICAL"],
         client=bigquery.Client(),
     )
 
