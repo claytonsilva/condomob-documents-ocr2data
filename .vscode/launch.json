@@ -28,6 +28,21 @@
       ]
     },
     {
+      "name": "merger",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/src/main.py",
+      "console": "integratedTerminal",
+      "args": [
+        "merger",
+        "run",
+        "--path-dir",
+        "${workspaceFolder}/output",
+        "--output",
+        "${workspaceFolder}/processed/merged.csv"
+      ]
+    },
+    {
       "name": "analytical-reprocess",
       "type": "python",
       "request": "launch",
