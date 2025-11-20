@@ -29,7 +29,7 @@ triton = "^3.4.0"
 [tool.poetry.group.dev.dependencies]
 debugpy = "^1.8.14"
 ruff = "^0.14.2"
-pytest = "^8.4.0"
+pytest = "^9.0.1"
 pytest-xdist = "^3.7.0"
 pytest-cov = "^7.0.0"
 pytest-deadfixtures = '^2.2.1'
