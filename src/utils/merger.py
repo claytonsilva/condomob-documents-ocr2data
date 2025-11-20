@@ -4,6 +4,16 @@ import pandas as pd
 
 
 def merge_document(path: str, output_path: str):
+    """
+    Merges all CSV files in the specified directory into a single CSV file.
+
+    Args:
+        path (str): The directory containing the CSV files to merge.
+        output_path (str): The file path where the merged CSV will be saved.
+
+    Returns:
+        None. The merged CSV is written to `output_path`.
+    """
     csv_files = [f for f in os.listdir(path) if f.endswith(".csv")]
     dataframes = []
     for file in csv_files:
