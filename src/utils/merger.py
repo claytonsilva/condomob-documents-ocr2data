@@ -14,7 +14,9 @@ def merge_document(path: str, output_path: str):
     Returns:
         None. The merged CSV is written to `output_path`.
     """
-    csv_files = [os.path.join(path, f) for f in os.listdir(path) if f.endswith(".csv")]
+    csv_files = [
+        os.path.join(path, f) for f in os.listdir(path) if f.endswith(".csv")
+    ]
     dataframes = [pd.read_csv(file_path) for file_path in csv_files]
     # Concatenate all DataFrames
     merged_df = pd.concat(dataframes, ignore_index=False)
