@@ -107,7 +107,20 @@ def split_pdf_function(
     start: int = 1,
     end: int | None = None,
 ):
-    """Function to split PDF pages (converted from class-based)."""
+    """
+    Split a PDF file into individual pages and save them to the output directory.
+
+    This is a wrapper for split_pdf_to_pages, extracted to separate business logic from CLI commands.
+
+    Args:
+        path (str): Path to the input PDF file.
+        output_dir (str): Directory where the split pages will be saved.
+        start (int): The first page to split (1-based index).
+        end (int, optional): The last page to split. If None, splits to the last page.
+
+    Returns:
+        List[str]: List of file paths to the split PDF pages.
+    """
     return split_pdf_import(path, output_dir, start, end)
 
 
