@@ -41,7 +41,7 @@ pytest-asyncio = '^1.2.0'
 pydevd = "^3.4.1"
 mypy = "^1.18.2"
 types-pyyaml = "^6.0.12.20250516"
-pre-commit = "^4.3.0"
+pre-commit = "^4.5.0"
 
 [tool.mypy]
 disable_error_code = ["import-untyped", "assignment", "arg-type", "misc"]
