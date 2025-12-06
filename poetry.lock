@@ -3410,14 +3410,14 @@ pyobjc-framework-Quartz = ">=12.1"
 
 [[package]]
 name = "pypdf"
-version = "6.3.0"
+version = "6.4.0"
 description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming PDF files"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pypdf-6.3.0-py3-none-any.whl", hash = "sha256:2d5f9741e851e378908692d571374b3cbd94582fdd1c740fcf7c029ec35ac0e6"},
-    {file = "pypdf-6.3.0.tar.gz", hash = "sha256:d066a2fdf8195e1811ae5a9d5a2f97f5bed0e1e7954297295eadee6357e76c5d"},
+    {file = "pypdf-6.4.0-py3-none-any.whl", hash = "sha256:55ab9837ed97fd7fcc5c131d52fcc2223bc5c6b8a1488bbf7c0e27f1f0023a79"},
+    {file = "pypdf-6.4.0.tar.gz", hash = "sha256:4769d471f8ddc3341193ecc5d6560fa44cf8cd0abfabf21af4e195cc0c224072"},
 ]
 
 [package.extras]
@@ -5078,22 +5078,22 @@ files = [
 
 [[package]]
 name = "urllib3"
-version = "2.5.0"
+version = "2.6.0"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
 optional = false
 python-versions = ">=3.9"
 groups = ["main", "dev"]
 files = [
-    {file = "urllib3-2.5.0-py3-none-any.whl", hash = "sha256:e6b01673c0fa6a13e374b50871808eb3bf7046c4b125b216f6bf1cc604cff0dc"},
-    {file = "urllib3-2.5.0.tar.gz", hash = "sha256:3fc47733c7e419d4bc3f6b3dc2b4f890bb743906a30d56ba4a5bfa4bbff92760"},
+    {file = "urllib3-2.6.0-py3-none-any.whl", hash = "sha256:c90f7a39f716c572c4e3e58509581ebd83f9b59cced005b7db7ad2d22b0db99f"},
+    {file = "urllib3-2.6.0.tar.gz", hash = "sha256:cb9bcef5a4b345d5da5d145dc3e30834f58e8018828cbc724d30b4cb7d4d49f1"},
 ]
 markers = {dev = "platform_python_implementation != \"PyPy\""}
 
 [package.extras]
-brotli = ["brotli (>=1.0.9) ; platform_python_implementation == \"CPython\"", "brotlicffi (>=0.8.0) ; platform_python_implementation != \"CPython\""]
+brotli = ["brotli (>=1.2.0) ; platform_python_implementation == \"CPython\"", "brotlicffi (>=1.2.0.0) ; platform_python_implementation != \"CPython\""]
 h2 = ["h2 (>=4,<5)"]
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
-zstd = ["zstandard (>=0.18.0)"]
+zstd = ["backports-zstd (>=1.0.0) ; python_version < \"3.14\""]
 
 [[package]]
 name = "vcrpy"
@@ -5436,4 +5436,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.13,<3.14"
-content-hash = "034765d362dcb433e5968e8b354371585adf0e9f8577d6a082e042a4394c20d0"
+content-hash = "4485a06596f1842d3e1b42498c5955af66db406bb71b8a9eafba944386db70bf"
